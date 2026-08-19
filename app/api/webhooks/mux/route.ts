@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     const playbackId = event.data.playback_ids?.[0]?.id;
 
     if (lessonId && playbackId) {
-      await db.update(lessonsTable).set({ videoAssetId: playbackId }).where(eq(lessonsTable.id, lessonId));
+      await db.update(lessonsTable).set({ videoAssetId: playbackId, youtubeUrl: null }).where(eq(lessonsTable.id, lessonId));
     }
   }
 

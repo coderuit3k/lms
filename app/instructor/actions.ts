@@ -11,6 +11,7 @@ import { getCurrentAppUser } from "@/lib/auth";
 import { canManageCourses, getOwnedCourse, getOwnedLesson, getOwnedModule } from "@/lib/instructor";
 import { createNotification } from "@/lib/notifications";
 import { generateCourseContent } from "@/lib/ai-course-generator";
+import { suggestYoutubeVideos, type YoutubeSuggestion } from "@/lib/youtube-search";
 
 async function requireInstructor() {
   const appUser = await getCurrentAppUser();
@@ -292,6 +293,40 @@ export async function createMuxUpload(lessonId: number): Promise<{ uploadUrl: st
 
   if (!upload.url) throw new Error("Mux không trả về upload URL.");
   return { uploadUrl: upload.url };
+}
+
+export async function searchYoutubeForLesson(lessonId: number, topic: string): Promise<YoutubeSuggestion[]> {
+  const appUser = await requireInstructor();
+  const owned = await getOwnedLesson(appUser.id, appUser.role === "admin", lessonId);
+  if (!owned) throw new Error("Không tìm thấy bài học hoặc bạn không sở hữu.");
+
+  const trimmedTopic = topic.trim().slice(0, 200);
+  if (!trimmedTopic) throw new Error("Thiếu chủ đề tìm kiếm.");
+
+  return suggestYoutubeVideos(trimmedTopic);
+}
+
+export async function setLessonYoutubeVideo(lessonId: number, youtubeUrl: string) {
+  const appUser = await requireInstructor();
+  const owned = await getOwnedLesson(appUser.id, appUser.role === "admin", lessonId);
+  if (!owned) throw new Error("Không tìm thấy bài học hoặc bạn không sở hữu.");
+
+  if (!/^https:\/\/(www\.)?(youtube\.com|youtu\.be)\//.test(youtubeUrl)) {
+    throw new Error("URL không hợp lệ — chỉ chấp nhận link YouTube.");
+  }
+
+  // 1 lesson chỉ có 1 nguồn video — gắn YouTube thì bỏ video Mux đã upload (nếu có), tránh 2 nguồn cùng tồn tại gây nhầm lẫn khi phát.
+  await db.update(lessonsTable).set({ youtubeUrl, videoAssetId: null }).where(eq(lessonsTable.id, lessonId));
+  revalidatePath(`/instructor/courses/${owned.course.id}`);
+}
+
+export async function clearLessonYoutubeVideo(lessonId: number) {
+  const appUser = await requireInstructor();
+  const owned = await getOwnedLesson(appUser.id, appUser.role === "admin", lessonId);
+  if (!owned) throw new Error("Không tìm thấy bài học hoặc bạn không sở hữu.");
+
+  await db.update(lessonsTable).set({ youtubeUrl: null }).where(eq(lessonsTable.id, lessonId));
+  revalidatePath(`/instructor/courses/${owned.course.id}`);
 }
 
 // Tạm thời tự phục vụ (self-serve): bất kỳ user nào cũng có thể trở thành instructor.

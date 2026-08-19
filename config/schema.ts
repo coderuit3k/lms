@@ -57,6 +57,7 @@ export const lessonsTable = pgTable("lessons", {
     .references(() => modulesTable.id),
   title: varchar({ length: 255 }).notNull(),
   videoAssetId: varchar({ length: 255 }),
+  youtubeUrl: varchar({ length: 500 }),
   content: text(),
   duration: integer(),
   order: integer().notNull().default(0),

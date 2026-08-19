@@ -49,7 +49,12 @@ export function LearningPlayer({ data }: { data: LearnPageData }) {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter flex-1">
           {/* Video Player */}
           <div className="bg-surface-container-low border border-outline-variant/30 hover:border-primary/40 hover:shadow-[0_8px_30px_rgba(26,35,126,0.08)] transition-all duration-300 rounded-xl overflow-hidden md:col-span-8 lg:col-span-9 relative flex flex-col min-h-[400px] md:min-h-[500px]">
-            <LessonVideoPlayer lessonId={lesson.id} videoAssetId={lesson.videoAssetId} title={lesson.title} />
+            <LessonVideoPlayer
+              lessonId={lesson.id}
+              videoAssetId={lesson.videoAssetId}
+              youtubeUrl={lesson.youtubeUrl}
+              title={lesson.title}
+            />
           </div>
 
           {/* AI Tutor */}

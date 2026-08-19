@@ -308,6 +308,7 @@ export type LearnPageData = {
     title: string;
     content: string | null;
     videoAssetId: string | null;
+    youtubeUrl: string | null;
     duration: number | null;
   };
   curriculum: LearnCurriculumItem[];
@@ -371,6 +372,7 @@ export async function getLearnPageData(lessonId: number, userId: number): Promis
       title: lesson.title,
       content: lesson.content,
       videoAssetId: lesson.videoAssetId,
+      youtubeUrl: lesson.youtubeUrl,
       duration: lesson.duration,
     },
     curriculum,
@@ -630,6 +632,7 @@ export type InstructorModule = {
     title: string;
     order: number;
     videoAssetId: string | null;
+    youtubeUrl: string | null;
     duration: number | null;
     content: string | null;
   }[];
@@ -661,6 +664,7 @@ export async function getInstructorCourseDetail(courseId: number) {
         title: l.title,
         order: l.order,
         videoAssetId: l.videoAssetId,
+        youtubeUrl: l.youtubeUrl,
         duration: l.duration,
         content: l.content,
       })),

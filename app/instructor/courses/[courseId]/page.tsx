@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
 import { MaterialIcon } from "@/components/site/material-icon";
 import { VideoUploadButton } from "@/components/site/video-upload-button";
+import { YoutubeVideoPicker } from "@/components/site/youtube-video-picker";
 import { getCurrentAppUser } from "@/lib/auth";
 import { getOwnedCourse } from "@/lib/instructor";
 import { getInstructorCourseDetail } from "@/lib/queries";
@@ -189,8 +190,12 @@ export default async function EditCoursePage({
                   <details key={lesson.id} className="bg-surface rounded-lg border border-outline-variant/30">
                     <summary className="cursor-pointer list-none p-3 flex items-center gap-2">
                       <MaterialIcon
-                        name={lesson.videoAssetId ? "videocam" : "videocam_off"}
-                        className={lesson.videoAssetId ? "text-secondary text-[18px]" : "text-on-surface-variant text-[18px]"}
+                        name={lesson.videoAssetId || lesson.youtubeUrl ? "videocam" : "videocam_off"}
+                        className={
+                          lesson.videoAssetId || lesson.youtubeUrl
+                            ? "text-secondary text-[18px]"
+                            : "text-on-surface-variant text-[18px]"
+                        }
                       />
                       <span className="font-label-md text-label-md text-on-surface truncate">{lesson.title}</span>
                     </summary>
@@ -245,6 +250,11 @@ export default async function EditCoursePage({
                         </div>
                       </form>
                       <VideoUploadButton lessonId={lesson.id} hasVideo={Boolean(lesson.videoAssetId)} />
+                      <YoutubeVideoPicker
+                        lessonId={lesson.id}
+                        defaultTopic={lesson.title}
+                        hasYoutubeVideo={Boolean(lesson.youtubeUrl)}
+                      />
                     </div>
                   </details>
                 ))}
