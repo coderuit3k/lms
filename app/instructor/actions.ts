@@ -10,6 +10,7 @@ import { coursesTable, enrollmentsTable, lessonsTable, modulesTable, progressTab
 import { getCurrentAppUser } from "@/lib/auth";
 import { canManageCourses, getOwnedCourse, getOwnedLesson, getOwnedModule } from "@/lib/instructor";
 import { createNotification } from "@/lib/notifications";
+import { generateCourseContent } from "@/lib/ai-course-generator";
 
 async function requireInstructor() {
   const appUser = await getCurrentAppUser();
@@ -37,6 +38,42 @@ export async function createCourse(formData: FormData) {
     .insert(coursesTable)
     .values({ instructorId: appUser.id, title, slug: slugify(title) })
     .returning();
+
+  revalidatePath("/instructor");
+  redirect(`/instructor/courses/${course.id}`);
+}
+
+export async function generateCourseWithAI(formData: FormData) {
+  const appUser = await requireInstructor();
+  const topic = String(formData.get("topic") ?? "").trim().slice(0, 200);
+  if (!topic) throw new Error("Thiếu chủ đề khoá học.");
+
+  const generated = await generateCourseContent(topic);
+
+  const [course] = await db
+    .insert(coursesTable)
+    .values({
+      instructorId: appUser.id,
+      title: generated.title,
+      slug: slugify(generated.title),
+      description: generated.description,
+      category: generated.category,
+      level: generated.level,
+    })
+    .returning();
+
+  for (const [moduleIdx, mod] of generated.modules.entries()) {
+    const [moduleRow] = await db
+      .insert(modulesTable)
+      .values({ courseId: course.id, title: mod.title, order: moduleIdx })
+      .returning();
+
+    for (const [lessonIdx, lesson] of mod.lessons.entries()) {
+      await db
+        .insert(lessonsTable)
+        .values({ moduleId: moduleRow.id, title: lesson.title, content: lesson.content, order: lessonIdx });
+    }
+  }
 
   revalidatePath("/instructor");
   redirect(`/instructor/courses/${course.id}`);

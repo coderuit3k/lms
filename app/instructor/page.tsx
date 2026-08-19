@@ -5,7 +5,11 @@ import { MaterialIcon } from "@/components/site/material-icon";
 import { formatPrice } from "@/components/site/course-card";
 import { getCurrentAppUser } from "@/lib/auth";
 import { getInstructorCourses } from "@/lib/queries";
-import { createCourse, togglePublish } from "./actions";
+import { createCourse, generateCourseWithAI, togglePublish } from "./actions";
+
+// AI generate course đo thật ~45-50s (Claude Opus 5, effort thấp) — nâng trần thời gian Server
+// Action trên page này để không bị cắt giữa chừng khi deploy serverless.
+export const maxDuration = 60;
 
 export default async function InstructorPage() {
   const appUser = await getCurrentAppUser();
@@ -61,6 +65,35 @@ export default async function InstructorPage() {
             className="px-6 py-2 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary/90 transition-colors whitespace-nowrap"
           >
             Tạo khoá học
+          </button>
+        </form>
+
+        {/* Create course with AI */}
+        <form
+          action={generateCourseWithAI}
+          className="bg-surface-container-lowest border border-dashed border-primary/40 rounded-xl p-6 flex flex-col sm:flex-row gap-3 items-stretch sm:items-end"
+        >
+          <div className="flex-1">
+            <label className="block font-label-sm text-label-sm text-on-surface-variant mb-1 flex items-center gap-1">
+              <MaterialIcon name="auto_awesome" className="text-[16px] text-primary" /> Tạo khoá học bằng AI
+            </label>
+            <input
+              name="topic"
+              required
+              maxLength={200}
+              placeholder="VD: Nhập môn TypeScript cho người mới"
+              className="w-full bg-surface border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary"
+            />
+            <p className="font-label-sm text-label-sm text-on-surface-variant mt-1">
+              AI tự sinh mô tả, danh mục, module và nội dung bài học từ chủ đề bạn nhập (mất khoảng 30-60 giây). Video
+              vẫn cần tự upload sau.
+            </p>
+          </div>
+          <button
+            type="submit"
+            className="px-6 py-2 border border-primary text-primary font-label-md text-label-md rounded-lg hover:bg-primary/10 transition-colors whitespace-nowrap flex items-center gap-1 justify-center"
+          >
+            <MaterialIcon name="auto_awesome" className="text-[16px]" /> Tạo bằng AI
           </button>
         </form>
 
