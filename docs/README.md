@@ -8,6 +8,12 @@ Bộ tài liệu này chia việc biến "Scholaris" từ UI prototype tĩnh th�
 - Khi làm xong 1 việc, tick thành `- [x] việc cần làm` (render thành checkbox xanh trên GitHub/hầu hết Markdown viewer).
 - Key môi trường cần cho từng phase: xem [`.env.example`](../.env.example) ở root repo (comment ghi rõ key nào dùng ở phase nào).
 
+## Deploy
+
+- Production: https://lms-seven-tawny.vercel.app
+- Repo: https://github.com/coderuit3k/lms (private)
+- Push lên nhánh `master` tự động trigger deploy production trên Vercel (đã kết nối GitHub integration).
+
 ## Trạng thái nền tảng hiện tại (baseline)
 
 Next.js 16 (custom build) + Tailwind v4 + shadcn, Clerk auth thật, Drizzle + Neon Postgres với 10 bảng thật (users, courses, modules, lessons, enrollments, progress, certificates, threads, replies, resources, notifications). Toàn bộ trang chính đã chạy data thật qua Drizzle — AI Tutor (Anthropic/OpenAI), thanh toán VNPay, video Mux, upload UploadThing, email Resend, search full-text Postgres đều đã nối dây thật (không còn mock). `lib/mock-data.ts` không còn được page nào dùng (dead code, chưa xoá khỏi file). Xem mục **Test toàn hệ thống** bên dưới cho kết quả kiểm tra gần nhất.
