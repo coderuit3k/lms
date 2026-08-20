@@ -11,7 +11,7 @@ type NavKey = "browse" | "dashboard" | "community";
 
 const navLinks: { key: NavKey; label: string; href: string }[] = [
   { key: "browse", label: "Khám phá", href: "/" },
-  { key: "dashboard", label: "Dashboard", href: "/dashboard" },
+  { key: "dashboard", label: "Trang học tập", href: "/dashboard" },
   { key: "community", label: "Cộng đồng", href: "/community" },
 ];
 

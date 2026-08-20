@@ -20,7 +20,7 @@ const CONTENT = {
     icon: "warning",
     color: "text-error",
     title: "Không xác thực được giao dịch",
-    body: "Chữ ký giao dịch không hợp lệ. Nếu tiền đã bị trừ, vui lòng liên hệ hỗ trợ.",
+    body: "Không xác nhận được thông tin giao dịch. Nếu tiền đã bị trừ, vui lòng liên hệ hỗ trợ.",
   },
   error: {
     icon: "error",
@@ -67,7 +67,7 @@ export default async function PaymentResultPage({
             href="/dashboard"
             className="px-6 py-3 border border-outline-variant text-on-surface font-label-md text-label-md rounded-lg hover:bg-surface-container-high transition-colors"
           >
-            Về Dashboard
+            Về trang học tập
           </Link>
         </div>
       </main>

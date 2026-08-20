@@ -85,8 +85,8 @@ export default async function InstructorPage() {
               className="w-full bg-surface border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary"
             />
             <p className="font-label-sm text-label-sm text-on-surface-variant mt-1">
-              AI tự sinh mô tả, danh mục, module và nội dung bài học từ chủ đề bạn nhập (mất khoảng 30-60 giây). Video
-              cho từng bài học cũng do AI gợi ý từ YouTube — vào sửa khoá học sau khi tạo.
+              AI tự sinh mô tả, danh mục, các chương và nội dung bài học từ chủ đề bạn nhập (mất khoảng 30-60 giây).
+              Video cho từng bài học cũng do AI gợi ý từ YouTube — vào sửa khoá học sau khi tạo.
             </p>
           </div>
           <button
@@ -123,7 +123,7 @@ export default async function InstructorPage() {
                     </span>
                   </div>
                   <p className="font-label-sm text-label-sm text-on-surface-variant">
-                    {course.moduleCount} module • {course.lessonCount} bài học • {course.enrollmentCount} học viên •{" "}
+                    {course.moduleCount} chương • {course.lessonCount} bài học • {course.enrollmentCount} học viên •{" "}
                     {formatPrice(course.price)}
                   </p>
                 </div>

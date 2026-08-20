@@ -100,11 +100,16 @@ export default async function EditCoursePage({
             </div>
             <div>
               <label className="block font-label-sm text-label-sm text-on-surface-variant mb-1">Trình độ</label>
-              <input
+              <select
                 name="level"
                 defaultValue={course.level ?? ""}
                 className="w-full bg-surface border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary"
-              />
+              >
+                <option value="">Chưa chọn</option>
+                <option value="Beginner">Cơ bản</option>
+                <option value="Intermediate">Trung cấp</option>
+                <option value="Advanced">Nâng cao</option>
+              </select>
             </div>
             <div>
               <label className="block font-label-sm text-label-sm text-on-surface-variant mb-1">Giá (đ, 0 = miễn phí)</label>
@@ -130,11 +135,11 @@ export default async function EditCoursePage({
             </div>
           </div>
           <div>
-            <label className="block font-label-sm text-label-sm text-on-surface-variant mb-1">URL ảnh thumbnail</label>
+            <label className="block font-label-sm text-label-sm text-on-surface-variant mb-1">Ảnh bìa khoá học</label>
             <input
               name="thumbnailUrl"
               defaultValue={course.thumbnailUrl ?? ""}
-              placeholder="https://..."
+              placeholder="Dán link ảnh vào đây (VD: https://...)"
               className="w-full bg-surface border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary"
             />
           </div>
@@ -227,7 +232,7 @@ export default async function EditCoursePage({
                         <textarea
                           name="content"
                           rows={2}
-                          placeholder="Nội dung / transcript bài học (AI Tutor sẽ dùng để trả lời câu hỏi)"
+                          placeholder="Nội dung bài học (Gia sư AI sẽ dùng để trả lời câu hỏi của học viên)"
                           defaultValue={lesson.content ?? ""}
                           className="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-primary resize-y"
                         />
@@ -276,11 +281,11 @@ export default async function EditCoursePage({
             <input
               name="title"
               required
-              placeholder="Tên module mới"
+              placeholder="Tên chương mới"
               className="flex-1 bg-surface border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary"
             />
             <button type="submit" className="px-4 py-2 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary/90 transition-colors whitespace-nowrap">
-              + Thêm module
+              + Thêm chương
             </button>
           </form>
         </div>

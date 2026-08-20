@@ -5,7 +5,7 @@ import Provider from "./provider";
 
 export const metadata: Metadata = {
   title: "Scholaris - Nền tảng học trực tuyến",
-  description: "Làm chủ tương lai, từng module một.",
+  description: "Làm chủ tương lai, từng chương một.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

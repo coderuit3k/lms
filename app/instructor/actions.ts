@@ -130,7 +130,7 @@ export async function createModule(courseId: number, formData: FormData) {
   if (!course) throw new Error("Không tìm thấy khoá học hoặc bạn không sở hữu.");
 
   const title = String(formData.get("title") ?? "").trim().slice(0, 255);
-  if (!title) throw new Error("Thiếu tên module.");
+  if (!title) throw new Error("Thiếu tên chương.");
 
   const existing = await db.select().from(modulesTable).where(eq(modulesTable.courseId, courseId));
   const nextOrder = existing.reduce((max, m) => Math.max(max, m.order), -1) + 1;
@@ -143,10 +143,10 @@ export async function createModule(courseId: number, formData: FormData) {
 export async function updateModuleTitle(moduleId: number, formData: FormData) {
   const appUser = await requireInstructor();
   const owned = await getOwnedModule(appUser.id, appUser.role === "admin", moduleId);
-  if (!owned) throw new Error("Không tìm thấy module hoặc bạn không sở hữu.");
+  if (!owned) throw new Error("Không tìm thấy chương hoặc bạn không sở hữu.");
 
   const title = String(formData.get("title") ?? "").trim().slice(0, 255);
-  if (!title) throw new Error("Tên module không được để trống.");
+  if (!title) throw new Error("Tên chương không được để trống.");
 
   await db.update(modulesTable).set({ title }).where(eq(modulesTable.id, moduleId));
   revalidatePath(`/instructor/courses/${owned.course.id}`);
@@ -155,10 +155,10 @@ export async function updateModuleTitle(moduleId: number, formData: FormData) {
 export async function deleteModule(moduleId: number) {
   const appUser = await requireInstructor();
   const owned = await getOwnedModule(appUser.id, appUser.role === "admin", moduleId);
-  if (!owned) throw new Error("Không tìm thấy module hoặc bạn không sở hữu.");
+  if (!owned) throw new Error("Không tìm thấy chương hoặc bạn không sở hữu.");
 
   const lessons = await db.select().from(lessonsTable).where(eq(lessonsTable.moduleId, moduleId));
-  if (lessons.length > 0) throw new Error("Xoá hết bài học trong module trước khi xoá module.");
+  if (lessons.length > 0) throw new Error("Xoá hết bài học trong chương trước khi xoá chương.");
 
   await db.delete(modulesTable).where(eq(modulesTable.id, moduleId));
   revalidatePath(`/instructor/courses/${owned.course.id}`);
@@ -167,7 +167,7 @@ export async function deleteModule(moduleId: number) {
 export async function moveModule(moduleId: number, direction: "up" | "down") {
   const appUser = await requireInstructor();
   const owned = await getOwnedModule(appUser.id, appUser.role === "admin", moduleId);
-  if (!owned) throw new Error("Không tìm thấy module hoặc bạn không sở hữu.");
+  if (!owned) throw new Error("Không tìm thấy chương hoặc bạn không sở hữu.");
 
   const siblings = await db
     .select()
@@ -190,7 +190,7 @@ export async function moveModule(moduleId: number, direction: "up" | "down") {
 export async function createLesson(moduleId: number, formData: FormData) {
   const appUser = await requireInstructor();
   const owned = await getOwnedModule(appUser.id, appUser.role === "admin", moduleId);
-  if (!owned) throw new Error("Không tìm thấy module hoặc bạn không sở hữu.");
+  if (!owned) throw new Error("Không tìm thấy chương hoặc bạn không sở hữu.");
 
   const topic = String(formData.get("topic") ?? "").trim().slice(0, 200);
   if (!topic) throw new Error("Thiếu chủ đề bài học.");
@@ -288,7 +288,7 @@ export async function setLessonYoutubeVideo(lessonId: number, youtubeUrl: string
   if (!owned) throw new Error("Không tìm thấy bài học hoặc bạn không sở hữu.");
 
   if (!/^https:\/\/(www\.)?(youtube\.com|youtu\.be)\//.test(youtubeUrl)) {
-    throw new Error("URL không hợp lệ — chỉ chấp nhận link YouTube.");
+    throw new Error("Link không hợp lệ — chỉ chấp nhận link YouTube.");
   }
 
   // 1 lesson chỉ có 1 nguồn video — gắn YouTube thì bỏ video Mux đã upload (nếu có), tránh 2 nguồn cùng tồn tại gây nhầm lẫn khi phát.

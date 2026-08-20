@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
 import { MaterialIcon } from "@/components/site/material-icon";
-import { formatPrice } from "@/components/site/course-card";
+import { formatPrice, levelLabel } from "@/components/site/course-card";
 import { getCourseBySlug, getEnrollmentStatus } from "@/lib/queries";
 import { getCurrentAppUser } from "@/lib/auth";
 import { enrollFree, payWithVnpay } from "./actions";
@@ -58,7 +58,7 @@ export default async function CourseDetailPage({
               )}
               {course.level && (
                 <span className="bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm px-3 py-1 rounded-full">
-                  {course.level}
+                  {levelLabel(course.level)}
                 </span>
               )}
             </div>

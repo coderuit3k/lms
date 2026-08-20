@@ -7,6 +7,18 @@ export function formatPrice(price: string | null) {
   return `${Number(price).toLocaleString("vi-VN")}đ`;
 }
 
+const LEVEL_LABELS: Record<string, string> = {
+  Beginner: "Cơ bản",
+  Intermediate: "Trung cấp",
+  Advanced: "Nâng cao",
+};
+
+// AI sinh course luôn dùng 1 trong 3 giá trị tiếng Anh ở trên — khoá học tạo thủ công thì trình độ
+// là ô nhập tự do, có thể là bất kỳ chuỗi nào, nên fallback về nguyên giá trị nếu không khớp.
+export function levelLabel(level: string) {
+  return LEVEL_LABELS[level] ?? level;
+}
+
 export function CourseCard({ course, size }: { course: CourseCardData; size: "hero" | "compact" }) {
   const isHero = size === "hero";
 
@@ -61,7 +73,7 @@ export function CourseCard({ course, size }: { course: CourseCardData; size: "he
           <div className="flex justify-between items-start mb-auto relative z-10">
             {course.level && (
               <span className="bg-secondary/10 text-secondary border border-secondary/20 font-label-sm text-label-sm px-2 py-1 rounded">
-                {course.level}
+                {levelLabel(course.level)}
               </span>
             )}
             <MaterialIcon name="bookmark_border" className="text-on-surface-variant group-hover:text-primary transition-colors" />

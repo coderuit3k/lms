@@ -10,7 +10,7 @@ import { updateProfile } from "./actions";
 
 const notificationOptions: { key: string; label: string }[] = [
   { key: "notifyCourseUpdates", label: "Cập nhật khoá học & bài học mới" },
-  { key: "notifyCommunityReplies", label: "Trả lời & nhắc đến trong Community" },
+  { key: "notifyCommunityReplies", label: "Trả lời & nhắc đến trong Cộng đồng" },
   { key: "notifyWeeklyDigest", label: "Tổng kết tiến độ hàng tuần" },
   { key: "notifyProductAnnouncements", label: "Thông báo sản phẩm mới" },
 ];
@@ -77,7 +77,7 @@ export default async function SettingsPage() {
                       type="email"
                       value={appUser.email}
                       disabled
-                      title="Email được quản lý qua tài khoản đăng nhập (Clerk), không sửa được ở đây."
+                      title="Email được quản lý qua tài khoản đăng nhập, không sửa được ở đây."
                     />
                   </div>
                   <div className="sm:col-span-2">

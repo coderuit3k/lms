@@ -35,7 +35,7 @@ export default async function DiscoverPage() {
         {/* Header Text */}
         <div className="text-center md:text-left">
           <h1 className="font-display text-display max-md:text-[36px] max-md:leading-[44px] text-on-surface mb-4 tracking-tight">
-            Làm chủ tương lai, <span className="text-primary">từng module một.</span>
+            Làm chủ tương lai, <span className="text-primary">từng chương một.</span>
           </h1>
           <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto md:mx-0">
             Khám phá những khoá học chất lượng cao, được tuyển chọn bởi chuyên gia đầu ngành để giúp bạn học sâu và
@@ -85,7 +85,7 @@ export default async function DiscoverPage() {
                   <h3 className="font-display text-headline-md text-on-surface mb-2">Chưa biết bắt đầu từ đâu?</h3>
                   <p className="font-body-md text-body-md text-on-surface-variant max-w-md">
                     {userId
-                      ? "Vào Dashboard để tiếp tục lộ trình học của bạn."
+                      ? "Vào trang học tập để tiếp tục lộ trình học của bạn."
                       : "Tạo tài khoản miễn phí để nhận lộ trình học phù hợp với mục tiêu của bạn."}
                   </p>
                 </div>
@@ -93,7 +93,7 @@ export default async function DiscoverPage() {
                   href={userId ? "/dashboard" : "/sign-up"}
                   className="hidden md:flex border border-primary text-primary hover:bg-primary/5 font-label-md text-label-md px-6 py-3 rounded-lg transition-all items-center gap-2 flex-shrink-0"
                 >
-                  {userId ? "Vào Dashboard" : "Bắt đầu ngay"} <MaterialIcon name="east" />
+                  {userId ? "Vào trang học tập" : "Bắt đầu ngay"} <MaterialIcon name="east" />
                 </Link>
               </div>
               <div className="absolute right-0 top-1/2 -translate-y-1/2 w-64 h-64 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-all duration-700" />

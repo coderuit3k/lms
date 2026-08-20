@@ -33,7 +33,7 @@ export async function createReply(threadId: number, formData: FormData) {
   if (!appUser) throw new Error("Bạn cần đăng nhập để trả lời.");
 
   const body = String(formData.get("body") ?? "").trim();
-  if (!body) throw new Error("Nội dung reply trống.");
+  if (!body) throw new Error("Nội dung trả lời trống.");
 
   await db.insert(repliesTable).values({ threadId, authorId: appUser.id, body });
 

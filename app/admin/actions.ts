@@ -16,10 +16,10 @@ const VALID_ROLES = ["student", "instructor", "admin"];
 
 export async function updateUserRole(userId: number, formData: FormData) {
   const admin = await requireAdmin();
-  if (userId === admin.id) throw new Error("Không thể tự đổi role của chính mình.");
+  if (userId === admin.id) throw new Error("Không thể tự đổi vai trò của chính mình.");
 
   const role = String(formData.get("role") ?? "");
-  if (!VALID_ROLES.includes(role)) throw new Error("Role không hợp lệ.");
+  if (!VALID_ROLES.includes(role)) throw new Error("Vai trò không hợp lệ.");
 
   await db.update(usersTable).set({ role }).where(eq(usersTable.id, userId));
   revalidatePath("/admin/users");
@@ -30,7 +30,7 @@ export async function toggleUserStatus(userId: number) {
   if (userId === admin.id) throw new Error("Không thể tự khoá tài khoản của chính mình.");
 
   const [user] = await db.select().from(usersTable).where(eq(usersTable.id, userId));
-  if (!user) throw new Error("Không tìm thấy user.");
+  if (!user) throw new Error("Không tìm thấy người dùng.");
 
   await db
     .update(usersTable)

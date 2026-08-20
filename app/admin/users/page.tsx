@@ -5,7 +5,11 @@ import { AdminNav } from "@/components/site/admin-nav";
 import { getAllUsersAdmin } from "@/lib/queries";
 import { toggleUserStatus, updateUserRole } from "../actions";
 
-const ROLES = ["student", "instructor", "admin"];
+const ROLES: { value: string; label: string }[] = [
+  { value: "student", label: "Học viên" },
+  { value: "instructor", label: "Giảng viên" },
+  { value: "admin", label: "Quản trị viên" },
+];
 
 export default async function AdminUsersPage({
   searchParams,
@@ -45,7 +49,7 @@ export default async function AdminUsersPage({
               <tr className="border-b border-outline-variant/30 text-left text-on-surface-variant font-label-sm text-label-sm">
                 <th className="p-3">Tên</th>
                 <th className="p-3">Email</th>
-                <th className="p-3">Role</th>
+                <th className="p-3">Vai trò</th>
                 <th className="p-3">Trạng thái</th>
                 <th className="p-3">Hành động</th>
               </tr>
@@ -63,8 +67,8 @@ export default async function AdminUsersPage({
                         className="bg-surface border border-outline-variant rounded px-2 py-1 text-sm"
                       >
                         {ROLES.map((r) => (
-                          <option key={r} value={r}>
-                            {r}
+                          <option key={r.value} value={r.value}>
+                            {r.label}
                           </option>
                         ))}
                       </select>

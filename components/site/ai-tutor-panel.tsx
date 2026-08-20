@@ -30,7 +30,7 @@ export function AiTutorPanel({ lessonId }: { lessonId: number }) {
       });
 
       if (!res.ok || !res.body) {
-        throw new Error((await res.text()) || "Không gọi được AI Tutor.");
+        throw new Error((await res.text()) || "Không kết nối được Gia sư AI.");
       }
 
       const reader = res.body.getReader();
@@ -61,12 +61,12 @@ export function AiTutorPanel({ lessonId }: { lessonId: number }) {
     <div className="bg-surface-container-low border border-outline-variant/30 hover:border-primary/40 hover:shadow-[0_8px_30px_rgba(26,35,126,0.08)] transition-all duration-300 rounded-xl flex flex-col md:col-span-4 lg:col-span-3 min-h-[400px]">
       <div className="p-4 border-b border-outline-variant/30 flex items-center gap-2 bg-surface-container-high/50 rounded-t-xl">
         <MaterialIcon name="smart_toy" className="text-primary" />
-        <h2 className="font-headline-md text-headline-md text-on-surface text-[18px]">Scholaris AI Tutor</h2>
+        <h2 className="font-headline-md text-headline-md text-on-surface text-[18px]">Gia sư AI</h2>
       </div>
       <div className="flex-1 p-4 overflow-y-auto flex flex-col gap-3">
         {messages.length === 0 && (
           <p className="font-body-md text-body-md text-on-surface-variant text-sm">
-            Hỏi AI Tutor bất cứ điều gì về bài học này.
+            Hỏi Gia sư AI bất cứ điều gì về bài học này.
           </p>
         )}
         {messages.map((msg, i) =>

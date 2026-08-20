@@ -30,7 +30,7 @@ export type GeneratedCourse = z.infer<typeof CourseSchema>;
 // mức chấp nhận được cho 1 lần submit form đồng bộ và có nguy cơ chạm giới hạn thời gian hàm serverless.
 const PROMPT_INSTRUCTIONS = (topic: string) =>
   `Thiết kế đề cương khoá học ngắn gọn bằng tiếng Việt cho chủ đề: "${topic}".
-Yêu cầu: đúng 2-3 module, mỗi module 2-3 bài học. Mỗi bài học có nội dung giảng dạy thật (content) dài khoảng 80-150 từ — không phải chỉ 1 câu tóm tắt, nhưng cũng không cần dài dòng. category là 1 danh mục ngắn tiếng Anh (VD: "Web Development", "Data Science", "Design"). level là 1 trong "Beginner", "Intermediate", "Advanced".`;
+Yêu cầu: đúng 2-3 module, mỗi module 2-3 bài học. Mỗi bài học có nội dung giảng dạy thật (content) dài khoảng 80-150 từ — không phải chỉ 1 câu tóm tắt, nhưng cũng không cần dài dòng. category là 1 danh mục ngắn bằng tiếng Việt, người học phổ thông đọc hiểu ngay (VD: "Lập trình web", "Khoa học dữ liệu", "Thiết kế"). level là 1 trong "Beginner", "Intermediate", "Advanced" (giữ nguyên tiếng Anh, hệ thống tự dịch khi hiển thị).`;
 
 export async function generateCourseContent(topic: string): Promise<GeneratedCourse> {
   const hasAnthropic = Boolean(process.env.ANTHROPIC_API_KEY);

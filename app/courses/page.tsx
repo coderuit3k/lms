@@ -2,7 +2,7 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
 import { MaterialIcon } from "@/components/site/material-icon";
-import { CourseCard } from "@/components/site/course-card";
+import { CourseCard, levelLabel } from "@/components/site/course-card";
 import { getCategories, getCourseList, getLevels, type CourseListSort } from "@/lib/queries";
 
 const SORT_OPTIONS: { value: CourseListSort; label: string }[] = [
@@ -117,7 +117,7 @@ export default async function CoursesPage({
             <div className="flex gap-2 overflow-x-auto pb-1">
               <FilterChip label="Mọi trình độ" href={buildHref(sp, { level: undefined, page: undefined })} active={!sp.level} />
               {levels.map((l) => (
-                <FilterChip key={l} label={l} href={buildHref(sp, { level: l, page: undefined })} active={sp.level === l} />
+                <FilterChip key={l} label={levelLabel(l)} href={buildHref(sp, { level: l, page: undefined })} active={sp.level === l} />
               ))}
             </div>
           )}

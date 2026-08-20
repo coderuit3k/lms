@@ -4,7 +4,7 @@ import { MaterialIcon } from "@/components/site/material-icon";
 export type HubKey = "dashboard" | "courses" | "community" | "resources" | "settings";
 
 const hubLinks: { key: HubKey; icon: string; label: string; href: string }[] = [
-  { key: "dashboard", icon: "dashboard", label: "Dashboard", href: "/dashboard" },
+  { key: "dashboard", icon: "dashboard", label: "Trang học tập", href: "/dashboard" },
   { key: "courses", icon: "school", label: "Khoá học của tôi", href: "/dashboard" },
   { key: "community", icon: "biotech", label: "Nghiên cứu", href: "/community" },
   { key: "resources", icon: "library_books", label: "Thư viện", href: "/resources" },
