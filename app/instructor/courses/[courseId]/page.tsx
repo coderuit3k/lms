@@ -306,7 +306,7 @@ export default async function EditCoursePage({
                   <input
                     name="topic"
                     required
-                    placeholder="Chủ đề bài học mới (AI sẽ đặt tên + viết nội dung)"
+                    placeholder="Chủ đề bài học mới"
                     className="flex-1 bg-surface border border-outline-variant rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-primary"
                   />
                   <button type="submit" className="text-primary hover:underline font-label-sm text-label-sm whitespace-nowrap">
