@@ -5,7 +5,7 @@ import { MaterialIcon } from "@/components/site/material-icon";
 import { formatPrice } from "@/components/site/course-card";
 import { getCurrentAppUser } from "@/lib/auth";
 import { getInstructorCourses } from "@/lib/queries";
-import { createCourse, generateCourseWithAI, togglePublish } from "./actions";
+import { generateCourseWithAI, togglePublish } from "./actions";
 
 // AI generate course đo thật ~45-50s (Claude Opus 5, effort thấp) — nâng trần thời gian Server
 // Action trên page này để không bị cắt giữa chừng khi deploy serverless.
@@ -48,26 +48,6 @@ export default async function InstructorPage() {
           </div>
         </div>
 
-        {/* Create course */}
-        <form action={createCourse} className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-6 flex flex-col sm:flex-row gap-3 items-stretch sm:items-end">
-          <div className="flex-1">
-            <label className="block font-label-sm text-label-sm text-on-surface-variant mb-1">Tên khoá học mới</label>
-            <input
-              name="title"
-              required
-              maxLength={255}
-              placeholder="VD: Nhập môn React"
-              className="w-full bg-surface border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary"
-            />
-          </div>
-          <button
-            type="submit"
-            className="px-6 py-2 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary/90 transition-colors whitespace-nowrap"
-          >
-            Tạo khoá học
-          </button>
-        </form>
-
         {/* Create course with AI */}
         <form
           action={generateCourseWithAI}
@@ -84,10 +64,6 @@ export default async function InstructorPage() {
               placeholder="VD: Nhập môn TypeScript cho người mới"
               className="w-full bg-surface border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary"
             />
-            <p className="font-label-sm text-label-sm text-on-surface-variant mt-1">
-              AI tự sinh mô tả, danh mục, các chương và nội dung bài học từ chủ đề bạn nhập (mất khoảng 30-60 giây).
-              Video cho từng bài học cũng do AI gợi ý từ YouTube — vào sửa khoá học sau khi tạo.
-            </p>
           </div>
           <button
             type="submit"

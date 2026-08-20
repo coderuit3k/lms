@@ -29,20 +29,6 @@ function slugify(title: string) {
   return `${base || "khoa-hoc"}-${randomUUID().slice(0, 6)}`;
 }
 
-export async function createCourse(formData: FormData) {
-  const appUser = await requireInstructor();
-  const title = String(formData.get("title") ?? "").trim().slice(0, 255);
-  if (!title) throw new Error("Thiếu tên khoá học.");
-
-  const [course] = await db
-    .insert(coursesTable)
-    .values({ instructorId: appUser.id, title, slug: slugify(title) })
-    .returning();
-
-  revalidatePath("/instructor");
-  redirect(`/instructor/courses/${course.id}`);
-}
-
 export async function generateCourseWithAI(formData: FormData) {
   const appUser = await requireInstructor();
   const topic = String(formData.get("topic") ?? "").trim().slice(0, 200);
