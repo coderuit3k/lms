@@ -35,10 +35,11 @@ export default async function DiscoverPage() {
         {/* Header Text */}
         <div className="text-center md:text-left">
           <h1 className="font-display text-display max-md:text-[36px] max-md:leading-[44px] text-on-surface mb-4 tracking-tight">
-            Master the future, <span className="text-primary">one module at a time.</span>
+            Làm chủ tương lai, <span className="text-primary">từng module một.</span>
           </h1>
           <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto md:mx-0">
-            Discover elite courses designed for deep work and high-intensity learning. Curated by industry leaders.
+            Khám phá những khoá học chất lượng cao, được tuyển chọn bởi chuyên gia đầu ngành để giúp bạn học sâu và
+            hiệu quả.
           </p>
         </div>
 

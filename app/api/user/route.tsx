@@ -12,7 +12,7 @@ export async function POST(req: Request) {
         return NextResponse.json(
             {
                 success: false,
-                message: 'Name and Email are required!'
+                message: 'Thiếu tên hoặc email!'
             },
             {
                 status: 400

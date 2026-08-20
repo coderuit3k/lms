@@ -35,7 +35,7 @@ export default async function CommunityPage() {
         {/* Main Content */}
         <main className="flex-1 p-margin-mobile md:p-margin-desktop w-full max-w-container-max mx-auto">
           <header className="mb-stack-lg">
-            <h1 className="font-display text-display max-md:text-headline-lg text-primary mb-2">Community Forum</h1>
+            <h1 className="font-display text-display max-md:text-headline-lg text-primary mb-2">Diễn đàn cộng đồng</h1>
             <p className="font-body-lg text-body-lg text-on-surface-variant max-w-3xl">
               Trao đổi, thảo luận và chia sẻ kiến thức cùng học viên và giảng viên khác.
             </p>

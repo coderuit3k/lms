@@ -7,9 +7,9 @@ import { getEnrolledCourses, getHoursSpent, type EnrolledCourse } from "@/lib/qu
 import { becomeInstructor } from "@/app/instructor/actions";
 
 const sidebarTabs = [
-  { icon: "dashboard", label: "Overview", href: "/dashboard" },
-  { icon: "folder_open", label: "Resources", href: "/resources" },
-  { icon: "forum", label: "Community", href: "/community" },
+  { icon: "dashboard", label: "Tổng quan", href: "/dashboard" },
+  { icon: "folder_open", label: "Tài nguyên", href: "/resources" },
+  { icon: "forum", label: "Cộng đồng", href: "/community" },
 ];
 
 function progressOf(course: EnrolledCourse) {
@@ -60,7 +60,7 @@ export default async function DashboardPage() {
               <div className="w-12 h-12 rounded-lg overflow-hidden bg-primary-container shrink-0 flex items-center justify-center">
                 {activeCourse?.thumbnailUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img alt="Course thumbnail" className="w-full h-full object-cover" src={activeCourse.thumbnailUrl} />
+                  <img alt="Ảnh khoá học" className="w-full h-full object-cover" src={activeCourse.thumbnailUrl} />
                 ) : (
                   <MaterialIcon name="school" className="text-primary" />
                 )}
@@ -87,12 +87,12 @@ export default async function DashboardPage() {
                   key={tab.label}
                   href={tab.href}
                   className={
-                    tab.label === "Overview"
+                    tab.label === "Tổng quan"
                       ? "flex items-center gap-3 bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 transition-transform"
                       : "flex items-center gap-3 text-on-surface-variant px-4 py-3 hover:bg-surface-container-high rounded-lg transition-transform"
                   }
                 >
-                  <MaterialIcon name={tab.icon} filled={tab.label === "Overview"} />
+                  <MaterialIcon name={tab.icon} filled={tab.label === "Tổng quan"} />
                   {tab.label}
                 </Link>
               ))}
@@ -116,7 +116,7 @@ export default async function DashboardPage() {
               ) : null}
               <Link href="/settings" className="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:bg-surface-container-high rounded-lg transition-colors font-label-md text-label-md">
                 <MaterialIcon name="settings" />
-                Settings
+                Cài đặt
               </Link>
             </div>
           </div>
@@ -129,7 +129,7 @@ export default async function DashboardPage() {
             <div className="md:col-span-12 lg:col-span-8 bg-surface-container-lowest rounded-xl p-stack-lg border border-outline-variant/30 relative overflow-hidden flex flex-col justify-center min-h-[160px]">
               <div className="absolute -right-20 -top-20 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
               <h1 className="font-headline-lg text-headline-lg text-on-surface mb-2 relative z-10">
-                Welcome back, {displayName}.
+                Chào mừng trở lại, {displayName}.
               </h1>
               <p className="font-body-lg text-body-lg text-on-surface-variant relative z-10 max-w-lg">
                 {activeCourse

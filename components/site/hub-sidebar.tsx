@@ -5,15 +5,15 @@ export type HubKey = "dashboard" | "courses" | "community" | "resources" | "sett
 
 const hubLinks: { key: HubKey; icon: string; label: string; href: string }[] = [
   { key: "dashboard", icon: "dashboard", label: "Dashboard", href: "/dashboard" },
-  { key: "courses", icon: "school", label: "My Courses", href: "/dashboard" },
-  { key: "community", icon: "biotech", label: "Research", href: "/community" },
-  { key: "resources", icon: "library_books", label: "Library", href: "/resources" },
+  { key: "courses", icon: "school", label: "Khoá học của tôi", href: "/dashboard" },
+  { key: "community", icon: "biotech", label: "Nghiên cứu", href: "/community" },
+  { key: "resources", icon: "library_books", label: "Thư viện", href: "/resources" },
 ];
 
 export function HubSidebar({ active }: { active: HubKey }) {
   return (
     <aside className="hidden md:flex flex-col w-64 shrink-0 bg-surface-container-low border-r border-outline-variant/30 p-4 gap-1">
-      <div className="mb-4 px-4 font-label-md text-label-md text-on-surface-variant">Academic Hub</div>
+      <div className="mb-4 px-4 font-label-md text-label-md text-on-surface-variant">Khu học thuật</div>
       <nav className="flex-1 flex flex-col gap-2">
         {hubLinks.map((link) => (
           <Link
@@ -40,7 +40,7 @@ export function HubSidebar({ active }: { active: HubKey }) {
           }
         >
           <MaterialIcon name="settings" filled={active === "settings"} />
-          Settings
+          Cài đặt
         </Link>
       </div>
     </aside>

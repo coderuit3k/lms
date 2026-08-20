@@ -8,25 +8,25 @@ export function UserMenu({ role }: { role: string | null }) {
     <UserButton>
       <UserButton.MenuItems>
         <UserButton.Link
-          label="Profile"
+          label="Hồ sơ"
           href="/profile"
           labelIcon={<MaterialIcon name="person" className="text-[16px]" />}
         />
         <UserButton.Link
-          label="Settings"
+          label="Cài đặt"
           href="/settings"
           labelIcon={<MaterialIcon name="settings" className="text-[16px]" />}
         />
         {(role === "instructor" || role === "admin") && (
           <UserButton.Link
-            label="Instructor"
+            label="Giảng viên"
             href="/instructor"
             labelIcon={<MaterialIcon name="school" className="text-[16px]" />}
           />
         )}
         {role === "admin" && (
           <UserButton.Link
-            label="Admin"
+            label="Quản trị"
             href="/admin"
             labelIcon={<MaterialIcon name="shield_person" className="text-[16px]" />}
           />

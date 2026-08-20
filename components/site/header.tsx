@@ -10,9 +10,9 @@ import { getNotifications, getUnreadNotificationCount } from "@/lib/queries";
 type NavKey = "browse" | "dashboard" | "community";
 
 const navLinks: { key: NavKey; label: string; href: string }[] = [
-  { key: "browse", label: "Browse", href: "/" },
+  { key: "browse", label: "Khám phá", href: "/" },
   { key: "dashboard", label: "Dashboard", href: "/dashboard" },
-  { key: "community", label: "Community", href: "/community" },
+  { key: "community", label: "Cộng đồng", href: "/community" },
 ];
 
 export async function SiteHeader({
@@ -64,13 +64,13 @@ export async function SiteHeader({
                 href="/sign-in"
                 className="hidden md:block text-primary font-label-md text-label-md hover:underline transition-all"
               >
-                Sign In
+                Đăng nhập
               </Link>
               <Link
                 href="/sign-up"
                 className="bg-primary text-on-primary px-4 py-2 rounded-full font-label-md text-label-md hover:bg-primary/90 transition-colors"
               >
-                Get Started
+                Bắt đầu ngay
               </Link>
             </>
           )}
