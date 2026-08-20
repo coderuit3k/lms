@@ -4,8 +4,17 @@ import { AiTutorPanel } from "@/components/site/ai-tutor-panel";
 import { LessonVideoPlayer } from "@/components/site/lesson-video-player";
 import type { LearnPageData } from "@/lib/queries";
 
+function formatTimestamp(totalSeconds: number) {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+}
+
 export function LearningPlayer({ data }: { data: LearnPageData }) {
   const { course, module: mod, lesson, curriculum, prevLessonId, nextLessonId } = data;
+  const currentItem = curriculum.find((c) => c.lessonId === lesson.id);
+  const showResumeHint =
+    !currentItem?.completed && lesson.lastPositionSeconds !== null && lesson.lastPositionSeconds > 5;
 
   return (
     <div className="bg-background text-on-background font-body-md min-h-screen flex flex-col">
@@ -17,6 +26,12 @@ export function LearningPlayer({ data }: { data: LearnPageData }) {
               {mod.title}: {course.title}
             </h1>
             <p className="font-body-md text-body-md text-on-surface-variant mt-1">{lesson.title}</p>
+            {showResumeHint && (
+              <p className="font-label-sm text-label-sm text-primary mt-1 flex items-center gap-1">
+                <MaterialIcon name="history" className="text-[16px]" />
+                Đang xem tiếp từ {formatTimestamp(lesson.lastPositionSeconds ?? 0)}
+              </p>
+            )}
           </div>
           <div className="flex items-center gap-2">
             {prevLessonId && (
@@ -56,6 +71,7 @@ export function LearningPlayer({ data }: { data: LearnPageData }) {
               videoAssetId={lesson.videoAssetId}
               youtubeUrl={lesson.youtubeUrl}
               title={lesson.title}
+              initialPosition={lesson.lastPositionSeconds}
             />
           </div>
 

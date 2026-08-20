@@ -310,6 +310,7 @@ export type LearnPageData = {
     videoAssetId: string | null;
     youtubeUrl: string | null;
     duration: number | null;
+    lastPositionSeconds: number | null;
   };
   curriculum: LearnCurriculumItem[];
   prevLessonId: number | null;
@@ -374,6 +375,7 @@ export async function getLearnPageData(lessonId: number, userId: number): Promis
       videoAssetId: lesson.videoAssetId,
       youtubeUrl: lesson.youtubeUrl,
       duration: lesson.duration,
+      lastPositionSeconds: progressRows.find((p) => p.lessonId === lessonId)?.lastPositionSeconds ?? null,
     },
     curriculum,
     prevLessonId: idx > 0 ? curriculum[idx - 1].lessonId : null,

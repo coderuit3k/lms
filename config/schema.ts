@@ -86,6 +86,7 @@ export const progressTable = pgTable("progress", {
     .references(() => lessonsTable.id),
   completed: boolean().notNull().default(false),
   completedAt: timestamp(),
+  lastPositionSeconds: integer(),
 });
 
 export const certificatesTable = pgTable("certificates", {

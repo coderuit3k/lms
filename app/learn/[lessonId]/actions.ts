@@ -48,6 +48,37 @@ export async function markLessonComplete(lessonId: number) {
   revalidatePath(`/learn/${lessonId}`);
 }
 
+// Gọi định kỳ trong lúc xem video (không phải hành động người dùng bấm) — lưu vị trí xem để
+// lần sau vào lại bài học tự tiếp tục từ đó. Không dùng revalidatePath ở đây vì gọi rất thường
+// xuyên trong lúc phát, revalidate mỗi lần sẽ làm giật video.
+export async function saveLessonPosition(lessonId: number, positionSeconds: number) {
+  const appUser = await getCurrentAppUser();
+  if (!appUser) return;
+
+  const [row] = await db
+    .select({ courseId: modulesTable.courseId })
+    .from(lessonsTable)
+    .innerJoin(modulesTable, eq(lessonsTable.moduleId, modulesTable.id))
+    .where(eq(lessonsTable.id, lessonId));
+  if (!row) return;
+
+  const status = await getEnrollmentStatus(appUser.id, row.courseId);
+  if (status !== "paid") return;
+
+  const rounded = Math.max(0, Math.floor(positionSeconds));
+
+  const [existing] = await db
+    .select()
+    .from(progressTable)
+    .where(and(eq(progressTable.userId, appUser.id), eq(progressTable.lessonId, lessonId)));
+
+  if (existing) {
+    await db.update(progressTable).set({ lastPositionSeconds: rounded }).where(eq(progressTable.id, existing.id));
+  } else {
+    await db.insert(progressTable).values({ userId: appUser.id, lessonId, lastPositionSeconds: rounded });
+  }
+}
+
 async function maybeIssueCertificate(userId: number, courseId: number) {
   const [{ total, completed }] = await db
     .select({
