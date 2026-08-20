@@ -98,6 +98,7 @@ export default async function ResourcesPage() {
                             href={item.fileUrl}
                             target="_blank"
                             rel="noopener noreferrer"
+                            aria-label={`Tải xuống ${item.title}`}
                             className="text-on-surface-variant hover:text-secondary shrink-0"
                           >
                             <MaterialIcon name="download" />

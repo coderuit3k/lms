@@ -38,7 +38,7 @@ export default async function AdminUsersPage({
             placeholder="Tìm theo tên hoặc email..."
             className="flex-1 bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-primary"
           />
-          <button type="submit" className="px-4 py-2 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary/90 transition-colors">
+          <button type="submit" className="px-4 py-2 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary/90 transition-all active:scale-[0.97]">
             Tìm
           </button>
         </form>

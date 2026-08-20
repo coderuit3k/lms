@@ -71,7 +71,7 @@ export default async function CommunityPage() {
                 />
                 <button
                   type="submit"
-                  className="self-end px-6 py-2 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary/90 transition-colors"
+                  className="self-end px-6 py-2 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary/90 transition-all active:scale-[0.97]"
                 >
                   Đăng thảo luận
                 </button>
@@ -133,54 +133,57 @@ export default async function CommunityPage() {
               )}
             </div>
 
-            {/* Trending Topics */}
-            <div className="md:col-span-4 bg-surface-container-low border border-outline-variant/30 rounded-xl shadow-[0_4px_20px_rgba(26,35,126,0.02)] p-6">
-              <h2 className="font-headline-md text-headline-md text-primary-container mb-4 flex items-center gap-2">
-                <MaterialIcon name="trending_up" />
-                Chủ đề nổi bật
-              </h2>
-              {trendingTags.length === 0 ? (
-                <p className="font-label-sm text-label-sm text-on-surface-variant">Chưa có dữ liệu.</p>
-              ) : (
-                <ul className="flex flex-col gap-3">
-                  {trendingTags.map((t, i) => (
-                    <li key={t.tag} className="flex items-center justify-between p-2 rounded">
-                      <div className="flex items-center gap-3">
-                        <span className="text-on-surface-variant font-label-md text-label-md font-bold">{i + 1}</span>
-                        <span className="font-label-md text-label-md text-on-surface">{t.tag}</span>
-                      </div>
-                      <span className="text-on-surface-variant font-label-sm text-label-sm">{t.count}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+            {/* Chủ đề nổi bật + Đóng góp nhiều nhất — carousel vuốt ngang trên mobile, 2 cột lưới trên desktop */}
+            <div className="md:contents flex gap-gutter overflow-x-auto snap-x snap-mandatory pb-1">
+              {/* Trending Topics */}
+              <div className="w-[85%] shrink-0 snap-start md:w-auto md:shrink md:col-span-4 bg-surface-container-low border border-outline-variant/30 rounded-xl shadow-[0_4px_20px_rgba(26,35,126,0.02)] p-6">
+                <h2 className="font-headline-md text-headline-md text-primary-container mb-4 flex items-center gap-2">
+                  <MaterialIcon name="trending_up" />
+                  Chủ đề nổi bật
+                </h2>
+                {trendingTags.length === 0 ? (
+                  <p className="font-label-sm text-label-sm text-on-surface-variant">Chưa có dữ liệu.</p>
+                ) : (
+                  <ul className="flex flex-col gap-3">
+                    {trendingTags.map((t, i) => (
+                      <li key={t.tag} className="flex items-center justify-between p-2 rounded">
+                        <div className="flex items-center gap-3">
+                          <span className="text-on-surface-variant font-label-md text-label-md font-bold">{i + 1}</span>
+                          <span className="font-label-md text-label-md text-on-surface">{t.tag}</span>
+                        </div>
+                        <span className="text-on-surface-variant font-label-sm text-label-sm">{t.count}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
 
-            {/* Top Contributors */}
-            <div className="md:col-span-4 bg-surface-container-lowest border border-outline-variant/30 rounded-xl shadow-[0_4px_20px_rgba(26,35,126,0.02)] p-6">
-              <h2 className="font-headline-md text-headline-md text-primary-container mb-4 flex items-center gap-2">
-                <MaterialIcon name="military_tech" />
-                Đóng góp nhiều nhất
-              </h2>
-              {contributors.length === 0 ? (
-                <p className="font-label-sm text-label-sm text-on-surface-variant">Chưa có dữ liệu.</p>
-              ) : (
-                <div className="flex flex-col gap-4">
-                  {contributors.map((person) => (
-                    <div key={person.id} className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center text-primary font-label-sm">
-                        {person.name.charAt(0).toUpperCase()}
+              {/* Top Contributors */}
+              <div className="w-[85%] shrink-0 snap-start md:w-auto md:shrink md:col-span-4 bg-surface-container-lowest border border-outline-variant/30 rounded-xl shadow-[0_4px_20px_rgba(26,35,126,0.02)] p-6">
+                <h2 className="font-headline-md text-headline-md text-primary-container mb-4 flex items-center gap-2">
+                  <MaterialIcon name="military_tech" />
+                  Đóng góp nhiều nhất
+                </h2>
+                {contributors.length === 0 ? (
+                  <p className="font-label-sm text-label-sm text-on-surface-variant">Chưa có dữ liệu.</p>
+                ) : (
+                  <div className="flex flex-col gap-4">
+                    {contributors.map((person) => (
+                      <div key={person.id} className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center text-primary font-label-sm">
+                          {person.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-label-md text-label-md text-on-surface">{person.name}</p>
+                          <p className="font-label-sm text-label-sm text-on-surface-variant">
+                            {person.threadCount} thảo luận • {person.replyCount} trả lời
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <p className="font-label-md text-label-md text-on-surface">{person.name}</p>
-                        <p className="font-label-sm text-label-sm text-on-surface-variant">
-                          {person.threadCount} thảo luận • {person.replyCount} trả lời
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Community Guidelines */}

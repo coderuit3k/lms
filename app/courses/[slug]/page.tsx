@@ -193,7 +193,7 @@ export default async function CourseDetailPage({
             {enrollmentStatus === "paid" ? (
               <Link
                 href={firstLessonId ? `/learn/${firstLessonId}` : "#"}
-                className="w-full text-center bg-primary text-on-primary font-label-md text-label-md py-4 rounded-xl hover:bg-primary/90 transition-colors shadow-md text-lg"
+                className="w-full text-center bg-primary text-on-primary font-label-md text-label-md py-4 rounded-xl hover:bg-primary/90 transition-all active:scale-[0.97] shadow-md text-lg"
               >
                 Vào học
               </Link>
@@ -204,7 +204,7 @@ export default async function CourseDetailPage({
             ) : !appUser ? (
               <Link
                 href="/sign-up"
-                className="w-full text-center bg-primary text-on-primary font-label-md text-label-md py-4 rounded-xl hover:bg-primary/90 transition-colors shadow-md text-lg"
+                className="w-full text-center bg-primary text-on-primary font-label-md text-label-md py-4 rounded-xl hover:bg-primary/90 transition-all active:scale-[0.97] shadow-md text-lg"
               >
                 Đăng nhập để đăng ký
               </Link>
@@ -212,7 +212,7 @@ export default async function CourseDetailPage({
               <form action={enrollFree.bind(null, course.id)}>
                 <button
                   type="submit"
-                  className="w-full bg-primary text-on-primary font-label-md text-label-md py-4 rounded-xl hover:bg-primary/90 transition-colors shadow-md text-lg"
+                  className="w-full bg-primary text-on-primary font-label-md text-label-md py-4 rounded-xl hover:bg-primary/90 transition-all active:scale-[0.97] shadow-md text-lg"
                 >
                   Đăng ký miễn phí
                 </button>
@@ -221,7 +221,7 @@ export default async function CourseDetailPage({
               <form action={payWithVnpay.bind(null, course.id)}>
                 <button
                   type="submit"
-                  className="w-full bg-primary text-on-primary font-label-md text-label-md py-4 rounded-xl hover:bg-primary/90 transition-colors shadow-md text-lg flex items-center justify-center gap-2"
+                  className="w-full bg-primary text-on-primary font-label-md text-label-md py-4 rounded-xl hover:bg-primary/90 transition-all active:scale-[0.97] shadow-md text-lg flex items-center justify-center gap-2"
                 >
                   <MaterialIcon name="lock" className="text-[18px]" />
                   Thanh toán qua VNPay

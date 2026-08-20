@@ -140,7 +140,7 @@ export default async function SettingsPage() {
             <div className="col-span-1 md:col-span-12 flex justify-end">
               <button
                 type="submit"
-                className="bg-primary text-on-primary font-label-md text-label-md px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors shadow-sm"
+                className="bg-primary text-on-primary font-label-md text-label-md px-6 py-2 rounded-lg hover:bg-primary/90 transition-all active:scale-[0.97] shadow-sm"
               >
                 Lưu thay đổi
               </button>

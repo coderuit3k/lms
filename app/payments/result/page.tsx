@@ -51,14 +51,14 @@ export default async function PaymentResultPage({
           {status === "success" && sp.course ? (
             <Link
               href={`/courses/${sp.course}`}
-              className="px-6 py-3 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary/90 transition-colors"
+              className="px-6 py-3 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary/90 transition-all active:scale-[0.97]"
             >
               Vào học ngay
             </Link>
           ) : sp.course ? (
             <Link
               href={`/courses/${sp.course}`}
-              className="px-6 py-3 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary/90 transition-colors"
+              className="px-6 py-3 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary/90 transition-all active:scale-[0.97]"
             >
               Thử lại
             </Link>

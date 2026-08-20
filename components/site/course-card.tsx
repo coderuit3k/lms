@@ -62,7 +62,7 @@ export function CourseCard({ course, size }: { course: CourseCardData; size: "he
             <p className="font-body-md text-body-md text-surface/80 line-clamp-2">{course.description}</p>
           )}
           <div className="mt-2 flex items-center gap-3">
-            <span className="bg-primary text-on-primary font-label-md text-label-md px-6 py-3 rounded-lg inline-flex items-center gap-2 group-hover:bg-primary/90 transition-colors">
+            <span className="bg-primary text-on-primary font-label-md text-label-md px-6 py-3 rounded-lg inline-flex items-center gap-2 group-hover:bg-primary/90 transition-all active:scale-[0.97]">
               Xem khoá học <MaterialIcon name="arrow_forward" className="text-[18px]" />
             </span>
             <span className="font-label-md text-label-md text-surface/90">{formatPrice(course.price)}</span>

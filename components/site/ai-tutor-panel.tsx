@@ -5,6 +5,16 @@ import { MaterialIcon } from "@/components/site/material-icon";
 
 type ChatMessage = { role: "user" | "assistant"; content: string };
 
+function TypingDots() {
+  return (
+    <span className="inline-flex items-center gap-1 py-1" aria-label="Gia sư AI đang trả lời" role="status">
+      <span className="w-1.5 h-1.5 rounded-full bg-on-surface-variant animate-bounce [animation-delay:-0.3s]" />
+      <span className="w-1.5 h-1.5 rounded-full bg-on-surface-variant animate-bounce [animation-delay:-0.15s]" />
+      <span className="w-1.5 h-1.5 rounded-full bg-on-surface-variant animate-bounce" />
+    </span>
+  );
+}
+
 export function AiTutorPanel({ lessonId }: { lessonId: number }) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
@@ -72,9 +82,11 @@ export function AiTutorPanel({ lessonId }: { lessonId: number }) {
         {messages.map((msg, i) =>
           msg.role === "assistant" ? (
             <div key={i} className="bg-surface-container-high px-4 py-3 rounded-lg rounded-tl-none self-start max-w-[90%]">
-              <p className="font-body-md text-body-md text-on-surface text-sm whitespace-pre-wrap">
-                {msg.content || (loading && i === messages.length - 1 ? "…" : "")}
-              </p>
+              {msg.content ? (
+                <p className="font-body-md text-body-md text-on-surface text-sm whitespace-pre-wrap">{msg.content}</p>
+              ) : (
+                loading && i === messages.length - 1 && <TypingDots />
+              )}
             </div>
           ) : (
             <div
@@ -99,6 +111,7 @@ export function AiTutorPanel({ lessonId }: { lessonId: number }) {
           />
           <button
             type="submit"
+            aria-label="Gửi câu hỏi"
             className="absolute right-2 top-1/2 -translate-y-1/2 text-primary hover:text-primary-container disabled:opacity-40"
             disabled={loading || !input.trim()}
           >

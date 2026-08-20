@@ -85,7 +85,7 @@ export async function SiteHeader({
                 </Link>
                 <Link
                   href="/sign-up"
-                  className="bg-primary text-on-primary px-4 py-2 rounded-full font-label-md text-label-md hover:bg-primary/90 transition-colors"
+                  className="bg-primary text-on-primary px-4 py-2 rounded-full font-label-md text-label-md hover:bg-primary/90 transition-all active:scale-[0.97]"
                 >
                   Bắt đầu ngay
                 </Link>

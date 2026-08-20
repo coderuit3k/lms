@@ -56,7 +56,7 @@ export default async function EditCoursePage({
               className={
                 course.published
                   ? "px-4 py-2 border border-outline-variant text-on-surface font-label-md text-label-md rounded-lg hover:bg-surface-container-high transition-colors"
-                  : "px-4 py-2 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary/90 transition-colors"
+                  : "px-4 py-2 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary/90 transition-all active:scale-[0.97]"
               }
             >
               {course.published ? "Gỡ xuất bản" : "Xuất bản khoá học"}
@@ -145,7 +145,7 @@ export default async function EditCoursePage({
           </div>
           <button
             type="submit"
-            className="self-end px-6 py-2 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary/90 transition-colors"
+            className="self-end px-6 py-2 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary/90 transition-all active:scale-[0.97]"
           >
             Lưu thông tin
           </button>
@@ -170,7 +170,12 @@ export default async function EditCoursePage({
                 </form>
                 <div className="flex items-center gap-1 shrink-0">
                   <form action={moveModule.bind(null, mod.id, "up")}>
-                    <button type="submit" disabled={modIdx === 0} className="text-on-surface-variant hover:text-primary disabled:opacity-30">
+                    <button
+                      type="submit"
+                      disabled={modIdx === 0}
+                      aria-label="Di chuyển chương lên"
+                      className="text-on-surface-variant hover:text-primary disabled:opacity-30"
+                    >
                       <MaterialIcon name="arrow_upward" className="text-[18px]" />
                     </button>
                   </form>
@@ -178,13 +183,14 @@ export default async function EditCoursePage({
                     <button
                       type="submit"
                       disabled={modIdx === modules.length - 1}
+                      aria-label="Di chuyển chương xuống"
                       className="text-on-surface-variant hover:text-primary disabled:opacity-30"
                     >
                       <MaterialIcon name="arrow_downward" className="text-[18px]" />
                     </button>
                   </form>
                   <form action={deleteModule.bind(null, mod.id)}>
-                    <button type="submit" className="text-on-surface-variant hover:text-error">
+                    <button type="submit" aria-label="Xoá chương" className="text-on-surface-variant hover:text-error">
                       <MaterialIcon name="delete" className="text-[18px]" />
                     </button>
                   </form>
@@ -209,7 +215,12 @@ export default async function EditCoursePage({
                     <div className="p-3 pt-0 flex flex-col gap-3">
                       <div className="flex items-center justify-end gap-1 -mt-1">
                         <form action={moveLesson.bind(null, lesson.id, "up")}>
-                          <button type="submit" disabled={lessonIdx === 0} className="text-on-surface-variant hover:text-primary disabled:opacity-30">
+                          <button
+                            type="submit"
+                            disabled={lessonIdx === 0}
+                            aria-label="Di chuyển bài học lên"
+                            className="text-on-surface-variant hover:text-primary disabled:opacity-30"
+                          >
                             <MaterialIcon name="arrow_upward" className="text-[16px]" />
                           </button>
                         </form>
@@ -217,13 +228,14 @@ export default async function EditCoursePage({
                           <button
                             type="submit"
                             disabled={lessonIdx === mod.lessons.length - 1}
+                            aria-label="Di chuyển bài học xuống"
                             className="text-on-surface-variant hover:text-primary disabled:opacity-30"
                           >
                             <MaterialIcon name="arrow_downward" className="text-[16px]" />
                           </button>
                         </form>
                         <form action={deleteLesson.bind(null, lesson.id)}>
-                          <button type="submit" className="text-on-surface-variant hover:text-error">
+                          <button type="submit" aria-label="Xoá bài học" className="text-on-surface-variant hover:text-error">
                             <MaterialIcon name="delete" className="text-[16px]" />
                           </button>
                         </form>
@@ -284,7 +296,7 @@ export default async function EditCoursePage({
               placeholder="Tên chương mới"
               className="flex-1 bg-surface border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary"
             />
-            <button type="submit" className="px-4 py-2 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary/90 transition-colors whitespace-nowrap">
+            <button type="submit" className="px-4 py-2 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary/90 transition-all active:scale-[0.97] whitespace-nowrap">
               + Thêm chương
             </button>
           </form>

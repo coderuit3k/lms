@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { MaterialIcon } from "@/components/site/material-icon";
 import { searchYoutubeForLesson, setLessonYoutubeVideo, clearLessonYoutubeVideo } from "@/app/instructor/actions";
 import type { YoutubeSuggestion } from "@/lib/youtube-search";
@@ -42,9 +43,12 @@ export function YoutubeVideoPicker({
       await setLessonYoutubeVideo(lessonId, suggestion.url);
       setOpen(false);
       setResults(null);
+      toast.success("Đã gắn video YouTube cho bài học.");
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Gắn video thất bại.");
+      const message = err instanceof Error ? err.message : "Gắn video thất bại.";
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -54,7 +58,10 @@ export function YoutubeVideoPicker({
     setLoading(true);
     try {
       await clearLessonYoutubeVideo(lessonId);
+      toast.success("Đã gỡ video khỏi bài học.");
       router.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Gỡ video thất bại.");
     } finally {
       setLoading(false);
     }
@@ -96,7 +103,7 @@ export function YoutubeVideoPicker({
               type="button"
               onClick={handleSearch}
               disabled={loading || !topic.trim()}
-              className="px-3 py-1.5 bg-primary text-on-primary rounded-lg text-sm disabled:opacity-50 whitespace-nowrap"
+              className="px-3 py-1.5 bg-primary text-on-primary rounded-lg text-sm disabled:opacity-50 whitespace-nowrap transition-transform active:scale-[0.97]"
             >
               {loading ? "Đang tìm..." : "Tìm"}
             </button>

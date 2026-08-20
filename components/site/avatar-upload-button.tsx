@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { UploadButton } from "@/lib/uploadthing";
 
 export function AvatarUploadButton() {
@@ -9,8 +10,13 @@ export function AvatarUploadButton() {
   return (
     <UploadButton
       endpoint="avatarUploader"
-      onClientUploadComplete={() => router.refresh()}
-      onUploadError={(error) => alert(`Lỗi tải ảnh: ${error.message}`)}
+      onClientUploadComplete={() => {
+        toast.success("Đã cập nhật ảnh đại diện.");
+        router.refresh();
+      }}
+      onUploadError={(error) => {
+        toast.error(`Lỗi tải ảnh: ${error.message}`);
+      }}
       appearance={{ container: "items-start" }}
       content={{ button: "Đổi ảnh" }}
     />

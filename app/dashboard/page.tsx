@@ -27,7 +27,7 @@ function EmptyState() {
       </p>
       <Link
         href="/courses"
-        className="px-6 py-3 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary/90 transition-colors"
+        className="px-6 py-3 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary/90 transition-all active:scale-[0.97]"
       >
         Khám phá khoá học
       </Link>
@@ -75,7 +75,7 @@ export default async function DashboardPage() {
             {activeCourse && (
               <Link
                 href={`/courses/${activeCourse.slug}`}
-                className="mb-2 w-full text-center bg-primary text-on-primary py-3 rounded-xl font-label-md text-label-md hover:bg-primary/90 transition-colors shadow-sm flex items-center justify-center gap-2"
+                className="mb-2 w-full text-center bg-primary text-on-primary py-3 rounded-xl font-label-md text-label-md hover:bg-primary/90 transition-all active:scale-[0.97] shadow-sm flex items-center justify-center gap-2"
               >
                 <MaterialIcon name="play_arrow" filled className="text-[18px]" />
                 Tiếp tục học
@@ -210,7 +210,7 @@ export default async function DashboardPage() {
                         <div className="w-full h-2 bg-[#ECEFF1] rounded-full overflow-hidden mb-6">
                           <div className="h-full bg-secondary rounded-full" style={{ width: `${progressOf(activeCourse)}%` }} />
                         </div>
-                        <span className="px-6 py-3 bg-primary text-on-primary font-label-md text-label-md rounded-lg group-hover:bg-primary/90 transition-colors flex items-center gap-2 font-semibold w-fit">
+                        <span className="px-6 py-3 bg-primary text-on-primary font-label-md text-label-md rounded-lg group-hover:bg-primary/90 transition-all active:scale-[0.97] flex items-center gap-2 font-semibold w-fit">
                           Tiếp tục học
                           <MaterialIcon name="arrow_forward" className="text-[18px]" />
                         </span>

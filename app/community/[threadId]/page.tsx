@@ -77,7 +77,7 @@ export default async function ThreadDetailPage({
             />
             <button
               type="submit"
-              className="self-end px-6 py-2 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary/90 transition-colors"
+              className="self-end px-6 py-2 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary/90 transition-all active:scale-[0.97]"
             >
               Gửi trả lời
             </button>

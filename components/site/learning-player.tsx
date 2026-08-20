@@ -22,6 +22,7 @@ export function LearningPlayer({ data }: { data: LearnPageData }) {
             {prevLessonId && (
               <Link
                 href={`/learn/${prevLessonId}`}
+                aria-label="Bài học trước"
                 className="bg-transparent border-[1.5px] border-outline-variant text-on-surface-variant px-3 py-2 rounded-lg font-label-md text-label-md hover:border-primary hover:text-primary transition-colors flex items-center gap-1"
               >
                 <MaterialIcon name="arrow_back" className="text-[18px]" />
@@ -30,6 +31,7 @@ export function LearningPlayer({ data }: { data: LearnPageData }) {
             {nextLessonId && (
               <Link
                 href={`/learn/${nextLessonId}`}
+                aria-label="Bài học tiếp theo"
                 className="bg-transparent border-[1.5px] border-outline-variant text-on-surface-variant px-3 py-2 rounded-lg font-label-md text-label-md hover:border-primary hover:text-primary transition-colors flex items-center gap-1"
               >
                 <MaterialIcon name="arrow_forward" className="text-[18px]" />

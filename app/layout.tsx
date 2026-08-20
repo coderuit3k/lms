@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "sonner";
 import Provider from "./provider";
 
 export const metadata: Metadata = {
@@ -26,6 +27,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Provider>
             {children}
           </Provider>
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              style: {
+                background: "var(--color-surface-container-lowest)",
+                color: "var(--color-on-surface)",
+                border: "1px solid var(--color-outline-variant)",
+              },
+            }}
+          />
         </body>
       </html>
     </ClerkProvider>

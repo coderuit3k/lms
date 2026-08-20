@@ -144,7 +144,7 @@ export default async function CoursesPage({
             {(sp.category || sp.level || sp.q) && (
               <Link
                 href="/courses"
-                className="px-6 py-3 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary/90 transition-colors"
+                className="px-6 py-3 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary/90 transition-all active:scale-[0.97]"
               >
                 Xoá bộ lọc
               </Link>

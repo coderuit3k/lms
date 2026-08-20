@@ -57,25 +57,26 @@ export default async function DiscoverPage() {
               </div>
             )}
 
-            {/* Stats */}
-            <div className="col-span-1 md:col-span-2 row-span-1 bg-surface-container-lowest border border-outline-variant/30 rounded-xl flex flex-col justify-center items-center p-6 text-center group">
-              <MaterialIcon name="school" filled className="text-4xl text-primary mb-2 group-hover:scale-110 transition-transform" />
-              <span className="font-display text-headline-lg text-on-surface font-bold">{courseCount}</span>
-              <span className="font-label-md text-label-md text-on-surface-variant">Khoá học</span>
-            </div>
-
-            {/* Categories quick link */}
-            <Link
-              href="/courses"
-              className="col-span-1 md:col-span-2 row-span-1 bg-surface-container-lowest border border-outline-variant/30 rounded-xl flex flex-col justify-center items-center p-6 text-center group cursor-pointer hover:bg-surface-container-low transition-colors"
-            >
-              <div className="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center mb-3 group-hover:bg-primary/10 transition-colors">
-                <MaterialIcon name="grid_view" className="text-on-surface-variant group-hover:text-primary transition-colors" />
+            {/* Stats + Categories — carousel vuốt ngang trên mobile, 2 cột lưới trên desktop */}
+            <div className="col-span-1 row-span-1 h-full md:contents flex gap-gutter overflow-x-auto snap-x snap-mandatory pb-1">
+              <div className="w-[75%] shrink-0 snap-start md:w-auto md:shrink md:col-span-2 md:row-span-1 bg-surface-container-lowest border border-outline-variant/30 rounded-xl flex flex-col justify-center items-center p-6 text-center group">
+                <MaterialIcon name="school" filled className="text-4xl text-primary mb-2 group-hover:scale-110 transition-transform" />
+                <span className="font-display text-headline-lg text-on-surface font-bold">{courseCount}</span>
+                <span className="font-label-md text-label-md text-on-surface-variant">Khoá học</span>
               </div>
-              <span className="font-label-md text-label-md text-on-surface">
-                {categories.length > 0 ? categories.join(" · ") : "Tất cả danh mục"}
-              </span>
-            </Link>
+
+              <Link
+                href="/courses"
+                className="w-[75%] shrink-0 snap-start md:w-auto md:shrink md:col-span-2 md:row-span-1 bg-surface-container-lowest border border-outline-variant/30 rounded-xl flex flex-col justify-center items-center p-6 text-center group cursor-pointer hover:bg-surface-container-low transition-colors"
+              >
+                <div className="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center mb-3 group-hover:bg-primary/10 transition-colors">
+                  <MaterialIcon name="grid_view" className="text-on-surface-variant group-hover:text-primary transition-colors" />
+                </div>
+                <span className="font-label-md text-label-md text-on-surface">
+                  {categories.length > 0 ? categories.join(" · ") : "Tất cả danh mục"}
+                </span>
+              </Link>
+            </div>
 
             {/* Assessment prompt */}
             <div className="col-span-1 md:col-span-8 row-span-1 bg-surface-container-lowest border border-outline-variant/30 rounded-xl flex items-center p-8 relative overflow-hidden group">
