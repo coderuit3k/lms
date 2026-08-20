@@ -51,6 +51,7 @@ export function SearchBox() {
         />
         <input
           name="q"
+          aria-label="Tìm khoá học, chủ đề"
           value={query}
           onChange={(e) => {
             const value = e.target.value;
@@ -62,7 +63,7 @@ export function SearchBox() {
           }}
           onFocus={() => results.length > 0 && setOpen(true)}
           autoComplete="off"
-          className="pl-10 pr-4 py-2 bg-surface-container-high border border-outline-variant rounded-full text-sm w-64 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-on-surface"
+          className="pl-10 pr-4 py-2 bg-surface-container-high border border-outline-variant rounded-full text-sm w-72 hover:border-primary/40 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-on-surface"
           placeholder="Tìm khoá học, chủ đề..."
           type="text"
         />

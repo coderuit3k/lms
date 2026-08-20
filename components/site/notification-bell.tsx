@@ -29,12 +29,12 @@ export function NotificationBell({
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="relative text-on-surface-variant hover:text-primary transition-colors p-1"
-        aria-label="Thông báo"
+        className="relative text-on-surface-variant hover:text-primary hover:bg-surface-container-high rounded-full p-2 transition-colors"
+        aria-label={unreadCount > 0 ? `Thông báo, ${unreadCount} chưa đọc` : "Thông báo"}
       >
         <MaterialIcon name="notifications" className="text-[22px]" />
         {unreadCount > 0 && (
-          <span className="absolute -top-0.5 -right-0.5 bg-error text-on-error text-[10px] leading-none rounded-full min-w-[16px] h-[16px] flex items-center justify-center px-1">
+          <span className="absolute top-0.5 right-0.5 bg-error text-on-error text-[10px] leading-none rounded-full min-w-[16px] h-[16px] flex items-center justify-center px-1">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}

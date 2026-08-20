@@ -4,6 +4,7 @@ import { MaterialIcon } from "@/components/site/material-icon";
 import { UserMenu } from "@/components/site/user-menu";
 import { NotificationBell } from "@/components/site/notification-bell";
 import { SearchBox } from "@/components/site/search-box";
+import { MobileNav } from "@/components/site/mobile-nav";
 import { getCurrentAppUser } from "@/lib/auth";
 import { getNotifications, getUnreadNotificationCount } from "@/lib/queries";
 
@@ -11,7 +12,7 @@ type NavKey = "browse" | "dashboard" | "community";
 
 const navLinks: { key: NavKey; label: string; href: string }[] = [
   { key: "browse", label: "Khám phá", href: "/" },
-  { key: "dashboard", label: "Trang học tập", href: "/dashboard" },
+  { key: "dashboard", label: "Học tập", href: "/dashboard" },
   { key: "community", label: "Cộng đồng", href: "/community" },
 ];
 
@@ -31,52 +32,68 @@ export async function SiteHeader({
   return (
     <header className="bg-surface sticky top-0 z-50 w-full border-b border-outline-variant/30">
       <div className="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto h-16">
-        <div className="flex items-center gap-8">
-          <Link className="font-display text-headline-md font-bold text-primary" href="/">
+        {/* Logo + Search */}
+        <div className="flex items-center gap-6 min-w-0">
+          <Link className="font-display text-headline-md font-bold text-primary shrink-0" href="/">
             Scholaris
           </Link>
           {showSearch && <SearchBox />}
         </div>
-        <nav className="hidden md:flex items-center gap-6">
-          {navLinks.map((link) => (
-            <Link
-              key={link.key}
-              href={link.href}
-              className={
-                active === link.key
-                  ? "text-primary font-bold border-b-2 border-primary pb-1 transition-colors"
-                  : "text-on-surface-variant hover:text-primary transition-colors"
-              }
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-        <div className="flex items-center gap-4">
-          {userId ? (
-            <>
-              <NotificationBell notifications={notifications} unreadCount={unreadCount} />
-              <UserMenu role={appUser?.role ?? null} />
-            </>
-          ) : (
-            <>
+
+        {/* Navigation + User actions */}
+        <div className="flex items-center gap-6 shrink-0">
+          <nav className="hidden md:flex items-center gap-1" aria-label="Điều hướng chính">
+            {navLinks.map((link) => (
               <Link
-                href="/sign-in"
-                className="hidden md:block text-primary font-label-md text-label-md hover:underline transition-all"
+                key={link.key}
+                href={link.href}
+                aria-current={active === link.key ? "page" : undefined}
+                className={
+                  active === link.key
+                    ? "px-3 py-2.5 rounded-lg font-label-md text-label-md bg-primary/10 text-primary font-semibold transition-colors"
+                    : "px-3 py-2.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-primary transition-colors"
+                }
               >
-                Đăng nhập
+                {link.label}
               </Link>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-3">
+            {showSearch && (
               <Link
-                href="/sign-up"
-                className="bg-primary text-on-primary px-4 py-2 rounded-full font-label-md text-label-md hover:bg-primary/90 transition-colors"
+                href="/courses"
+                aria-label="Tìm khoá học"
+                className="md:hidden text-on-surface-variant hover:text-primary hover:bg-surface-container-high rounded-full p-2 transition-colors"
               >
-                Bắt đầu ngay
+                <MaterialIcon name="search" className="text-[22px]" />
               </Link>
-            </>
-          )}
-          <button className="md:hidden text-on-surface">
-            <MaterialIcon name="menu" />
-          </button>
+            )}
+
+            {userId ? (
+              <>
+                <NotificationBell notifications={notifications} unreadCount={unreadCount} />
+                <UserMenu role={appUser?.role ?? null} />
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/sign-in"
+                  className="hidden md:block text-primary font-label-md text-label-md hover:underline transition-all"
+                >
+                  Đăng nhập
+                </Link>
+                <Link
+                  href="/sign-up"
+                  className="bg-primary text-on-primary px-4 py-2 rounded-full font-label-md text-label-md hover:bg-primary/90 transition-colors"
+                >
+                  Bắt đầu ngay
+                </Link>
+              </>
+            )}
+
+            <MobileNav navLinks={navLinks} active={active} signedIn={Boolean(userId)} />
+          </div>
         </div>
       </div>
     </header>

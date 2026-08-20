@@ -5,7 +5,7 @@ import { MaterialIcon } from "@/components/site/material-icon";
 
 export function UserMenu({ role }: { role: string | null }) {
   return (
-    <UserButton>
+    <UserButton appearance={{ elements: { avatarBox: "w-9 h-9" } }}>
       <UserButton.MenuItems>
         <UserButton.Link
           label="Hồ sơ"
