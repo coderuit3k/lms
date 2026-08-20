@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { LearningPlayer } from "@/components/site/learning-player";
 import { getCurrentAppUser } from "@/lib/auth";
+import { getOwnedCourse } from "@/lib/instructor";
 import { getEnrollmentStatus, getLearnPageData } from "@/lib/queries";
 
 export default async function LearnPage({
@@ -19,7 +20,9 @@ export default async function LearnPage({
   if (!data) notFound();
 
   const enrollmentStatus = await getEnrollmentStatus(appUser.id, data.course.id);
-  if (enrollmentStatus !== "paid") redirect(`/courses/${data.course.slug}`);
+  // Giảng viên sở hữu khoá học (hoặc admin) được tự xem trước bài học của mình, không cần "mua".
+  const isOwner = Boolean(await getOwnedCourse(appUser.id, appUser.role === "admin", data.course.id));
+  if (enrollmentStatus !== "paid" && !isOwner) redirect(`/courses/${data.course.slug}`);
 
   return <LearningPlayer data={data} />;
 }
