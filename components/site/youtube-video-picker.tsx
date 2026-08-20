@@ -67,33 +67,48 @@ export function YoutubeVideoPicker({
     }
   }
 
-  if (hasYoutubeVideo) {
-    return (
-      <button
-        type="button"
-        onClick={handleClear}
-        disabled={loading}
-        aria-label="Gỡ video YouTube khỏi bài học"
-        title="Gỡ video"
-        className="self-start text-on-surface-variant hover:text-error disabled:opacity-50 p-1.5 rounded-full hover:bg-surface-container-high transition-colors"
-      >
-        <MaterialIcon name="delete" className="text-[18px]" />
-      </button>
-    );
-  }
-
   return (
-    <div className="flex flex-col gap-2">
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="text-primary hover:text-primary-container flex items-center gap-1 font-label-sm text-label-sm w-fit"
+    <>
+      <div
+        className={
+          open
+            ? "absolute inset-x-0 bottom-0 p-2 flex justify-end gap-1.5 opacity-100 transition-opacity bg-gradient-to-t from-on-surface/70 to-transparent"
+            : "absolute inset-x-0 bottom-0 p-2 flex justify-end gap-1.5 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity bg-gradient-to-t from-on-surface/70 to-transparent"
+        }
       >
-        <MaterialIcon name="travel_explore" className="text-[16px]" /> Tìm video YouTube
-      </button>
+        {hasYoutubeVideo ? (
+          <>
+            <button
+              type="button"
+              onClick={() => setOpen((v) => !v)}
+              className="flex items-center gap-1 bg-surface/90 backdrop-blur-sm text-on-surface font-label-sm text-label-sm px-2.5 py-1.5 rounded-full hover:bg-surface transition-colors"
+            >
+              <MaterialIcon name="sync" className="text-[14px]" /> Đổi video
+            </button>
+            <button
+              type="button"
+              onClick={handleClear}
+              disabled={loading}
+              aria-label="Xoá video khỏi bài học"
+              title="Xoá video"
+              className="bg-surface/90 backdrop-blur-sm text-on-surface hover:text-error disabled:opacity-50 p-1.5 rounded-full hover:bg-surface transition-colors"
+            >
+              <MaterialIcon name="delete" className="text-[14px]" />
+            </button>
+          </>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            className="flex items-center gap-1 bg-surface/90 backdrop-blur-sm text-on-surface font-label-sm text-label-sm px-2.5 py-1.5 rounded-full hover:bg-surface transition-colors"
+          >
+            <MaterialIcon name="travel_explore" className="text-[14px]" /> Tìm video YouTube
+          </button>
+        )}
+      </div>
 
       {open && (
-        <div className="flex flex-col gap-2 bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3">
+        <div className="absolute left-0 right-0 top-full mt-2 z-20 flex flex-col gap-2 bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-3 shadow-lg opacity-100">
           <div className="flex items-center gap-2">
             <input
               value={topic}
@@ -143,6 +158,6 @@ export function YoutubeVideoPicker({
           )}
         </div>
       )}
-    </div>
+    </>
   );
 }

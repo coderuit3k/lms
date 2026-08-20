@@ -201,8 +201,8 @@ export default async function EditCoursePage({
               {/* Lessons */}
               <div className="flex flex-col gap-2 pl-2 border-l-2 border-outline-variant/30">
                 {mod.lessons.map((lesson, lessonIdx) => (
-                  <details key={lesson.id} className="bg-surface rounded-lg border border-outline-variant/30">
-                    <summary className="cursor-pointer list-none p-3 flex items-center gap-2">
+                  <details key={lesson.id} className="bg-surface rounded-xl border border-outline-variant/30">
+                    <summary className="cursor-pointer list-none p-4 flex items-center gap-2">
                       <MaterialIcon
                         name={lesson.videoAssetId || lesson.youtubeUrl ? "videocam" : "videocam_off"}
                         className={
@@ -213,14 +213,14 @@ export default async function EditCoursePage({
                       />
                       <span className="font-label-md text-label-md text-on-surface truncate">{lesson.title}</span>
                     </summary>
-                    <div className="p-3 pt-0 flex flex-col gap-3">
+                    <div className="p-4 pt-0 flex flex-col gap-4">
                       <div className="flex items-center justify-end gap-1 -mt-1">
                         <form action={moveLesson.bind(null, lesson.id, "up")}>
                           <button
                             type="submit"
                             disabled={lessonIdx === 0}
                             aria-label="Di chuyển bài học lên"
-                            className="text-on-surface-variant hover:text-primary disabled:opacity-30"
+                            className="text-on-surface-variant hover:text-primary hover:bg-surface-container-high disabled:opacity-30 disabled:hover:bg-transparent rounded-full p-1.5 transition-colors"
                           >
                             <MaterialIcon name="arrow_upward" className="text-[16px]" />
                           </button>
@@ -230,51 +230,64 @@ export default async function EditCoursePage({
                             type="submit"
                             disabled={lessonIdx === mod.lessons.length - 1}
                             aria-label="Di chuyển bài học xuống"
-                            className="text-on-surface-variant hover:text-primary disabled:opacity-30"
+                            className="text-on-surface-variant hover:text-primary hover:bg-surface-container-high disabled:opacity-30 disabled:hover:bg-transparent rounded-full p-1.5 transition-colors"
                           >
                             <MaterialIcon name="arrow_downward" className="text-[16px]" />
                           </button>
                         </form>
                         <form action={deleteLesson.bind(null, lesson.id)}>
-                          <button type="submit" aria-label="Xoá bài học" className="text-on-surface-variant hover:text-error">
+                          <button
+                            type="submit"
+                            aria-label="Xoá bài học"
+                            title="Xoá bài học"
+                            className="text-on-surface-variant hover:text-error hover:bg-error/10 rounded-full p-1.5 transition-colors"
+                          >
                             <MaterialIcon name="delete" className="text-[16px]" />
                           </button>
                         </form>
                       </div>
 
-                      <div className="flex flex-col md:flex-row gap-3">
+                      <div className="flex flex-col md:flex-row gap-4">
                         {/* Video — trái */}
-                        <div className="md:w-2/5 shrink-0 flex flex-col gap-2">
-                          {(lesson.videoAssetId || lesson.youtubeUrl) && (
-                            <div className="relative aspect-video rounded-lg overflow-hidden bg-on-surface">
-                              <LessonVideoPlayer
-                                lessonId={lesson.id}
-                                videoAssetId={lesson.videoAssetId}
-                                youtubeUrl={lesson.youtubeUrl}
-                                title={lesson.title}
-                                preview
-                              />
+                        <div className="md:w-2/5 shrink-0">
+                          {/* group ở đây (không overflow-hidden) để overlay/dropdown của YoutubeVideoPicker
+                              tràn ra ngoài khung video mà không bị cắt */}
+                          <div className="group relative">
+                            <div className="aspect-video rounded-xl overflow-hidden bg-on-surface">
+                              {lesson.videoAssetId || lesson.youtubeUrl ? (
+                                <LessonVideoPlayer
+                                  lessonId={lesson.id}
+                                  videoAssetId={lesson.videoAssetId}
+                                  youtubeUrl={lesson.youtubeUrl}
+                                  title={lesson.title}
+                                  preview
+                                />
+                              ) : (
+                                <div className="w-full h-full flex flex-col items-center justify-center gap-1 text-surface/50">
+                                  <MaterialIcon name="videocam_off" className="text-3xl" />
+                                </div>
+                              )}
                             </div>
-                          )}
-                          <YoutubeVideoPicker
-                            lessonId={lesson.id}
-                            defaultTopic={lesson.title}
-                            hasYoutubeVideo={Boolean(lesson.youtubeUrl)}
-                          />
+                            {/* Đổi / xoá video — hiện khi hover (tự quản lý opacity, luôn hiện khi đang mở tìm kiếm) */}
+                            <YoutubeVideoPicker
+                              lessonId={lesson.id}
+                              defaultTopic={lesson.title}
+                              hasYoutubeVideo={Boolean(lesson.youtubeUrl)}
+                            />
+                          </div>
                         </div>
 
                         {/* Nội dung — phải */}
-                        <form action={updateLesson.bind(null, lesson.id)} className="flex-1 flex flex-col gap-2">
+                        <form action={updateLesson.bind(null, lesson.id)} className="flex-1 flex flex-col gap-3">
                           <textarea
                             name="content"
-                            rows={6}
                             placeholder="Nội dung bài học (Gia sư AI sẽ dùng để trả lời câu hỏi của học viên)"
                             defaultValue={lesson.content ?? ""}
-                            className="w-full flex-1 bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-primary resize-y"
+                            className="w-full min-h-[140px] bg-surface-container-lowest border border-outline-variant rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-primary resize-none [field-sizing:content]"
                           />
                           <button
                             type="submit"
-                            className="self-end text-primary hover:underline font-label-sm text-label-sm"
+                            className="self-end px-4 py-2 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary/90 transition-all active:scale-[0.97]"
                           >
                             Lưu bài học
                           </button>
