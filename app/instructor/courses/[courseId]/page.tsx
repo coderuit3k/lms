@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
 import { MaterialIcon } from "@/components/site/material-icon";
 import { YoutubeVideoPicker } from "@/components/site/youtube-video-picker";
+import { LessonVideoPlayer } from "@/components/site/lesson-video-player";
 import { getCurrentAppUser } from "@/lib/auth";
 import { getOwnedCourse } from "@/lib/instructor";
 import { getInstructorCourseDetail } from "@/lib/queries";
@@ -213,6 +214,17 @@ export default async function EditCoursePage({
                       <span className="font-label-md text-label-md text-on-surface truncate">{lesson.title}</span>
                     </summary>
                     <div className="p-3 pt-0 flex flex-col gap-3">
+                      {(lesson.videoAssetId || lesson.youtubeUrl) && (
+                        <div className="relative aspect-video rounded-lg overflow-hidden bg-on-surface">
+                          <LessonVideoPlayer
+                            lessonId={lesson.id}
+                            videoAssetId={lesson.videoAssetId}
+                            youtubeUrl={lesson.youtubeUrl}
+                            title={lesson.title}
+                            preview
+                          />
+                        </div>
+                      )}
                       <div className="flex items-center justify-end gap-1 -mt-1">
                         <form action={moveLesson.bind(null, lesson.id, "up")}>
                           <button

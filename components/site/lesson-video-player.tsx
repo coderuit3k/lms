@@ -18,11 +18,14 @@ export function LessonVideoPlayer({
   videoAssetId,
   youtubeUrl,
   title,
+  preview = false,
 }: {
   lessonId: number;
   videoAssetId: string | null;
   youtubeUrl: string | null;
   title: string;
+  /** Xem trước cho giảng viên — không ghi nhận tiến độ hoàn thành bài học. */
+  preview?: boolean;
 }) {
   const markedRef = useRef(false);
 
@@ -56,14 +59,18 @@ export function LessonVideoPlayer({
       metadata={{ video_title: title }}
       streamType="on-demand"
       className="w-full h-full"
-      onTimeUpdate={(e) => {
-        const el = e.target as MuxPlayerRefAttributes;
-        if (markedRef.current || !el.duration) return;
-        if (el.currentTime / el.duration >= COMPLETE_THRESHOLD) {
-          markedRef.current = true;
-          markLessonComplete(lessonId);
-        }
-      }}
+      onTimeUpdate={
+        preview
+          ? undefined
+          : (e) => {
+              const el = e.target as MuxPlayerRefAttributes;
+              if (markedRef.current || !el.duration) return;
+              if (el.currentTime / el.duration >= COMPLETE_THRESHOLD) {
+                markedRef.current = true;
+                markLessonComplete(lessonId);
+              }
+            }
+      }
     />
   );
 }
