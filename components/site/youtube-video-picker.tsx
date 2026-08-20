@@ -69,14 +69,16 @@ export function YoutubeVideoPicker({
 
   if (hasYoutubeVideo) {
     return (
-      <div className="flex items-center gap-2">
-        <span className="font-label-sm text-label-sm text-secondary flex items-center gap-1">
-          <MaterialIcon name="smart_display" className="text-[16px]" /> Đã gắn video YouTube
-        </span>
-        <button type="button" onClick={handleClear} disabled={loading} className="text-error hover:underline font-label-sm text-label-sm disabled:opacity-50">
-          Gỡ
-        </button>
-      </div>
+      <button
+        type="button"
+        onClick={handleClear}
+        disabled={loading}
+        aria-label="Gỡ video YouTube khỏi bài học"
+        title="Gỡ video"
+        className="self-start text-on-surface-variant hover:text-error disabled:opacity-50 p-1.5 rounded-full hover:bg-surface-container-high transition-colors"
+      >
+        <MaterialIcon name="delete" className="text-[18px]" />
+      </button>
     );
   }
 

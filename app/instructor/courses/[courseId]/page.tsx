@@ -214,17 +214,6 @@ export default async function EditCoursePage({
                       <span className="font-label-md text-label-md text-on-surface truncate">{lesson.title}</span>
                     </summary>
                     <div className="p-3 pt-0 flex flex-col gap-3">
-                      {(lesson.videoAssetId || lesson.youtubeUrl) && (
-                        <div className="relative aspect-video rounded-lg overflow-hidden bg-on-surface">
-                          <LessonVideoPlayer
-                            lessonId={lesson.id}
-                            videoAssetId={lesson.videoAssetId}
-                            youtubeUrl={lesson.youtubeUrl}
-                            title={lesson.title}
-                            preview
-                          />
-                        </div>
-                      )}
                       <div className="flex items-center justify-end gap-1 -mt-1">
                         <form action={moveLesson.bind(null, lesson.id, "up")}>
                           <button
@@ -252,33 +241,45 @@ export default async function EditCoursePage({
                           </button>
                         </form>
                       </div>
-                      <form action={updateLesson.bind(null, lesson.id)} className="flex flex-col gap-2">
-                        <textarea
-                          name="content"
-                          rows={2}
-                          placeholder="Nội dung bài học (Gia sư AI sẽ dùng để trả lời câu hỏi của học viên)"
-                          defaultValue={lesson.content ?? ""}
-                          className="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-primary resize-y"
-                        />
-                        <div className="flex items-center gap-2">
-                          <input
-                            name="duration"
-                            type="number"
-                            min={0}
-                            placeholder="Thời lượng (phút)"
-                            defaultValue={lesson.duration ?? ""}
-                            className="w-32 bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-primary"
+
+                      <div className="flex flex-col md:flex-row gap-3">
+                        {/* Video — trái */}
+                        <div className="md:w-2/5 shrink-0 flex flex-col gap-2">
+                          {(lesson.videoAssetId || lesson.youtubeUrl) && (
+                            <div className="relative aspect-video rounded-lg overflow-hidden bg-on-surface">
+                              <LessonVideoPlayer
+                                lessonId={lesson.id}
+                                videoAssetId={lesson.videoAssetId}
+                                youtubeUrl={lesson.youtubeUrl}
+                                title={lesson.title}
+                                preview
+                              />
+                            </div>
+                          )}
+                          <YoutubeVideoPicker
+                            lessonId={lesson.id}
+                            defaultTopic={lesson.title}
+                            hasYoutubeVideo={Boolean(lesson.youtubeUrl)}
                           />
-                          <button type="submit" className="text-primary hover:underline font-label-sm text-label-sm">
+                        </div>
+
+                        {/* Nội dung — phải */}
+                        <form action={updateLesson.bind(null, lesson.id)} className="flex-1 flex flex-col gap-2">
+                          <textarea
+                            name="content"
+                            rows={6}
+                            placeholder="Nội dung bài học (Gia sư AI sẽ dùng để trả lời câu hỏi của học viên)"
+                            defaultValue={lesson.content ?? ""}
+                            className="w-full flex-1 bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-primary resize-y"
+                          />
+                          <button
+                            type="submit"
+                            className="self-end text-primary hover:underline font-label-sm text-label-sm"
+                          >
                             Lưu bài học
                           </button>
-                        </div>
-                      </form>
-                      <YoutubeVideoPicker
-                        lessonId={lesson.id}
-                        defaultTopic={lesson.title}
-                        hasYoutubeVideo={Boolean(lesson.youtubeUrl)}
-                      />
+                        </form>
+                      </div>
                     </div>
                   </details>
                 ))}
