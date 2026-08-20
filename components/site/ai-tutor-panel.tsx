@@ -15,7 +15,7 @@ function TypingDots() {
   );
 }
 
-export function AiTutorPanel({ lessonId }: { lessonId: number }) {
+export function AiTutorPanel({ lessonId, compact = false }: { lessonId: number; compact?: boolean }) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -68,7 +68,13 @@ export function AiTutorPanel({ lessonId }: { lessonId: number }) {
   }
 
   return (
-    <div className="bg-surface-container-low border border-outline-variant/30 hover:border-primary/40 hover:shadow-[0_8px_30px_rgba(26,35,126,0.08)] transition-all duration-300 rounded-xl flex flex-col md:col-span-4 lg:col-span-3 min-h-[400px]">
+    <div
+      className={
+        compact
+          ? "bg-surface-container-low border border-outline-variant/30 hover:border-primary/40 hover:shadow-[0_8px_30px_rgba(26,35,126,0.08)] transition-all duration-300 rounded-xl flex flex-col md:col-span-6 min-h-[300px]"
+          : "bg-surface-container-low border border-outline-variant/30 hover:border-primary/40 hover:shadow-[0_8px_30px_rgba(26,35,126,0.08)] transition-all duration-300 rounded-xl flex flex-col md:col-span-4 lg:col-span-3 min-h-[400px]"
+      }
+    >
       <div className="p-4 border-b border-outline-variant/30 flex items-center gap-2 bg-surface-container-high/50 rounded-t-xl">
         <MaterialIcon name="smart_toy" className="text-primary" />
         <h2 className="font-headline-md text-headline-md text-on-surface text-[18px]">Gia sư AI</h2>

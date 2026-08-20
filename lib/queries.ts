@@ -3,6 +3,8 @@ import {
   certificatesTable,
   coursesTable,
   enrollmentsTable,
+  lessonCommentsTable,
+  lessonReactionsTable,
   lessonsTable,
   modulesTable,
   notificationsTable,
@@ -311,6 +313,10 @@ export type LearnPageData = {
     youtubeUrl: string | null;
     duration: number | null;
     lastPositionSeconds: number | null;
+    saved: boolean;
+    helpfulCount: number;
+    notHelpfulCount: number;
+    userReaction: boolean | null;
   };
   curriculum: LearnCurriculumItem[];
   prevLessonId: number | null;
@@ -365,6 +371,19 @@ export async function getLearnPageData(lessonId: number, userId: number): Promis
 
   const idx = curriculum.findIndex((c) => c.lessonId === lessonId);
 
+  const [reactionCounts] = await db
+    .select({
+      helpful: sql<number>`count(*) filter (where ${lessonReactionsTable.isHelpful})`.mapWith(Number),
+      notHelpful: sql<number>`count(*) filter (where not ${lessonReactionsTable.isHelpful})`.mapWith(Number),
+    })
+    .from(lessonReactionsTable)
+    .where(eq(lessonReactionsTable.lessonId, lessonId));
+
+  const [userReactionRow] = await db
+    .select({ isHelpful: lessonReactionsTable.isHelpful })
+    .from(lessonReactionsTable)
+    .where(and(eq(lessonReactionsTable.userId, userId), eq(lessonReactionsTable.lessonId, lessonId)));
+
   return {
     course,
     module: { id: mod.id, title: mod.title },
@@ -376,11 +395,45 @@ export async function getLearnPageData(lessonId: number, userId: number): Promis
       youtubeUrl: lesson.youtubeUrl,
       duration: lesson.duration,
       lastPositionSeconds: progressRows.find((p) => p.lessonId === lessonId)?.lastPositionSeconds ?? null,
+      saved: progressRows.find((p) => p.lessonId === lessonId)?.saved ?? false,
+      helpfulCount: reactionCounts?.helpful ?? 0,
+      notHelpfulCount: reactionCounts?.notHelpful ?? 0,
+      userReaction: userReactionRow?.isHelpful ?? null,
     },
     curriculum,
     prevLessonId: idx > 0 ? curriculum[idx - 1].lessonId : null,
     nextLessonId: idx >= 0 && idx < curriculum.length - 1 ? curriculum[idx + 1].lessonId : null,
   };
+}
+
+export type LessonComment = {
+  id: number;
+  lessonId: number;
+  parentId: number | null;
+  body: string;
+  createdAt: Date;
+  authorId: number;
+  authorName: string;
+  authorAvatarUrl: string | null;
+};
+
+export async function getLessonComments(lessonId: number): Promise<LessonComment[]> {
+  const rows = await db
+    .select({
+      id: lessonCommentsTable.id,
+      lessonId: lessonCommentsTable.lessonId,
+      parentId: lessonCommentsTable.parentId,
+      body: lessonCommentsTable.body,
+      createdAt: lessonCommentsTable.createdAt,
+      authorId: usersTable.id,
+      authorName: usersTable.name,
+      authorAvatarUrl: usersTable.avatarUrl,
+    })
+    .from(lessonCommentsTable)
+    .innerJoin(usersTable, eq(usersTable.id, lessonCommentsTable.authorId))
+    .where(eq(lessonCommentsTable.lessonId, lessonId))
+    .orderBy(asc(lessonCommentsTable.createdAt));
+  return rows;
 }
 
 export async function getHoursSpent(userId: number): Promise<number> {

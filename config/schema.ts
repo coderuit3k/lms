@@ -87,6 +87,32 @@ export const progressTable = pgTable("progress", {
   completed: boolean().notNull().default(false),
   completedAt: timestamp(),
   lastPositionSeconds: integer(),
+  saved: boolean().notNull().default(false),
+});
+
+export const lessonReactionsTable = pgTable("lesson_reactions", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  userId: integer()
+    .notNull()
+    .references(() => usersTable.id),
+  lessonId: integer()
+    .notNull()
+    .references(() => lessonsTable.id),
+  isHelpful: boolean().notNull(),
+  createdAt: timestamp().notNull().defaultNow(),
+});
+
+export const lessonCommentsTable = pgTable("lesson_comments", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  lessonId: integer()
+    .notNull()
+    .references(() => lessonsTable.id),
+  authorId: integer()
+    .notNull()
+    .references(() => usersTable.id),
+  parentId: integer(),
+  body: text().notNull(),
+  createdAt: timestamp().notNull().defaultNow(),
 });
 
 export const certificatesTable = pgTable("certificates", {
@@ -128,6 +154,9 @@ export const repliesTable = pgTable("replies", {
 export const resourcesTable = pgTable("resources", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   courseId: integer().references(() => coursesTable.id),
+  // Tài liệu gắn cho 1 bài học cụ thể (khác tài liệu chung ở cấp khoá học) — null nếu là tài
+  // liệu chung của khoá học như trước.
+  lessonId: integer().references(() => lessonsTable.id),
   title: varchar({ length: 255 }).notNull(),
   fileUrl: varchar({ length: 500 }).notNull(),
   fileType: varchar({ length: 100 }),

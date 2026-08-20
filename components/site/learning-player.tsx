@@ -1,7 +1,11 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import { MaterialIcon } from "@/components/site/material-icon";
 import { AiTutorPanel } from "@/components/site/ai-tutor-panel";
 import { LessonVideoPlayer } from "@/components/site/lesson-video-player";
+import { LessonActionsBar } from "@/components/site/lesson-actions-bar";
 import type { LearnPageData } from "@/lib/queries";
 
 function formatTimestamp(totalSeconds: number) {
@@ -15,6 +19,7 @@ export function LearningPlayer({ data }: { data: LearnPageData }) {
   const currentItem = curriculum.find((c) => c.lessonId === lesson.id);
   const showResumeHint =
     !currentItem?.completed && lesson.lastPositionSeconds !== null && lesson.lastPositionSeconds > 5;
+  const [cinema, setCinema] = useState(false);
 
   return (
     <div className="bg-background text-on-background font-body-md min-h-screen flex flex-col">
@@ -34,6 +39,20 @@ export function LearningPlayer({ data }: { data: LearnPageData }) {
             )}
           </div>
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setCinema((v) => !v)}
+              aria-pressed={cinema}
+              aria-label={cinema ? "Tắt chế độ rạp chiếu phim" : "Bật chế độ rạp chiếu phim"}
+              title={cinema ? "Tắt chế độ rạp chiếu phim" : "Chế độ rạp chiếu phim"}
+              className={
+                cinema
+                  ? "bg-primary/10 border-[1.5px] border-primary text-primary px-3 py-2 rounded-lg transition-colors flex items-center gap-1"
+                  : "bg-transparent border-[1.5px] border-outline-variant text-on-surface-variant px-3 py-2 rounded-lg hover:border-primary hover:text-primary transition-colors flex items-center gap-1"
+              }
+            >
+              <MaterialIcon name="theaters" filled={cinema} className="text-[18px]" />
+            </button>
             {prevLessonId && (
               <Link
                 href={`/learn/${prevLessonId}`}
@@ -62,10 +81,15 @@ export function LearningPlayer({ data }: { data: LearnPageData }) {
           </div>
         </header>
 
-        {/* Bento Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter flex-1">
-          {/* Video Player */}
-          <div className="bg-surface-container-low border border-outline-variant/30 hover:border-primary/40 hover:shadow-[0_8px_30px_rgba(26,35,126,0.08)] transition-all duration-300 rounded-xl overflow-hidden md:col-span-8 lg:col-span-9 relative flex flex-col min-h-[400px] md:min-h-[500px]">
+        {/* Hàng 1: Video (+ AI Tutor bên cạnh khi không ở chế độ rạp chiếu phim) */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+          <div
+            className={
+              cinema
+                ? "bg-surface-container-low border border-outline-variant/30 hover:border-primary/40 hover:shadow-[0_8px_30px_rgba(26,35,126,0.08)] transition-all duration-300 rounded-xl overflow-hidden md:col-span-12 relative flex flex-col min-h-[420px] md:min-h-[640px]"
+                : "bg-surface-container-low border border-outline-variant/30 hover:border-primary/40 hover:shadow-[0_8px_30px_rgba(26,35,126,0.08)] transition-all duration-300 rounded-xl overflow-hidden md:col-span-8 lg:col-span-9 relative flex flex-col min-h-[400px] md:min-h-[500px]"
+            }
+          >
             <LessonVideoPlayer
               lessonId={lesson.id}
               videoAssetId={lesson.videoAssetId}
@@ -75,11 +99,31 @@ export function LearningPlayer({ data }: { data: LearnPageData }) {
             />
           </div>
 
-          {/* AI Tutor */}
-          <AiTutorPanel lessonId={lesson.id} />
+          {!cinema && <AiTutorPanel lessonId={lesson.id} compact={false} />}
+        </div>
 
-          {/* Curriculum List */}
-          <div className="bg-surface-container-low border border-outline-variant/30 hover:border-primary/40 hover:shadow-[0_8px_30px_rgba(26,35,126,0.08)] transition-all duration-300 rounded-xl p-6 flex flex-col md:col-span-12 h-[300px]">
+        {/* Thanh hành động — luôn ngay dưới video, giống YouTube */}
+        <div className="px-1">
+          <LessonActionsBar
+            lessonId={lesson.id}
+            helpfulCount={lesson.helpfulCount}
+            notHelpfulCount={lesson.notHelpfulCount}
+            userReaction={lesson.userReaction}
+            saved={lesson.saved}
+          />
+        </div>
+
+        {/* Hàng 2: AI Tutor (khi ở chế độ rạp chiếu phim) + Nội dung khoá học */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter flex-1">
+          {cinema && <AiTutorPanel lessonId={lesson.id} compact />}
+
+          <div
+            className={
+              cinema
+                ? "bg-surface-container-low border border-outline-variant/30 hover:border-primary/40 hover:shadow-[0_8px_30px_rgba(26,35,126,0.08)] transition-all duration-300 rounded-xl p-6 flex flex-col md:col-span-6 h-[300px]"
+                : "bg-surface-container-low border border-outline-variant/30 hover:border-primary/40 hover:shadow-[0_8px_30px_rgba(26,35,126,0.08)] transition-all duration-300 rounded-xl p-6 flex flex-col md:col-span-12 h-[300px]"
+            }
+          >
             <h3 className="font-headline-md text-headline-md text-on-surface text-[20px] mb-4">Nội dung khoá học</h3>
             <div className="overflow-y-auto pr-2 flex flex-col gap-2">
               {curriculum.map((item) => {
