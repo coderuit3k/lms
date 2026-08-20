@@ -16,8 +16,12 @@ function Provider({ children }: { children: React.ReactNode }) {
 
             if (!email) return;
 
+            // fullName có thể rỗng (Clerk sign-up không bắt buộc nhập tên) — API /api/user yêu cầu
+            // name khác rỗng, nên phải fallback chứ không truyền thẳng user.fullName.
+            const name = user.fullName || user.username || email.split("@")[0];
+
             const result = await axios.post<User>("/api/user", {
-                name: user.fullName,
+                name,
                 email,
             });
 
