@@ -86,7 +86,7 @@ export default async function InstructorPage() {
             />
             <p className="font-label-sm text-label-sm text-on-surface-variant mt-1">
               AI tự sinh mô tả, danh mục, module và nội dung bài học từ chủ đề bạn nhập (mất khoảng 30-60 giây). Video
-              vẫn cần tự upload sau.
+              cho từng bài học cũng do AI gợi ý từ YouTube — vào sửa khoá học sau khi tạo.
             </p>
           </div>
           <button

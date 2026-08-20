@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
 import { MaterialIcon } from "@/components/site/material-icon";
-import { VideoUploadButton } from "@/components/site/video-upload-button";
 import { YoutubeVideoPicker } from "@/components/site/youtube-video-picker";
 import { getCurrentAppUser } from "@/lib/auth";
 import { getOwnedCourse } from "@/lib/instructor";
@@ -20,6 +19,9 @@ import {
   updateLesson,
   updateModuleTitle,
 } from "../../actions";
+
+// createLesson giờ gọi AI (generateLessonContent) — cần dài hơn mặc định 10s của Vercel.
+export const maxDuration = 30;
 
 export default async function EditCoursePage({
   params,
@@ -222,12 +224,6 @@ export default async function EditCoursePage({
                         </form>
                       </div>
                       <form action={updateLesson.bind(null, lesson.id)} className="flex flex-col gap-2">
-                        <input
-                          name="title"
-                          required
-                          defaultValue={lesson.title}
-                          className="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-primary"
-                        />
                         <textarea
                           name="content"
                           rows={2}
@@ -249,7 +245,6 @@ export default async function EditCoursePage({
                           </button>
                         </div>
                       </form>
-                      <VideoUploadButton lessonId={lesson.id} hasVideo={Boolean(lesson.videoAssetId)} />
                       <YoutubeVideoPicker
                         lessonId={lesson.id}
                         defaultTopic={lesson.title}
@@ -259,16 +254,17 @@ export default async function EditCoursePage({
                   </details>
                 ))}
 
-                {/* Add lesson */}
+                {/* Add lesson — AI sinh tên + nội dung từ chủ đề, không nhập tay */}
                 <form action={createLesson.bind(null, mod.id)} className="flex items-center gap-2 p-2">
+                  <MaterialIcon name="auto_awesome" className="text-primary text-[18px] shrink-0" />
                   <input
-                    name="title"
+                    name="topic"
                     required
-                    placeholder="Tên bài học mới"
+                    placeholder="Chủ đề bài học mới (AI sẽ đặt tên + viết nội dung)"
                     className="flex-1 bg-surface border border-outline-variant rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-primary"
                   />
                   <button type="submit" className="text-primary hover:underline font-label-sm text-label-sm whitespace-nowrap">
-                    + Thêm bài học
+                    + Thêm bài học bằng AI
                   </button>
                 </form>
               </div>

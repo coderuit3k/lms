@@ -4,13 +4,12 @@ import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { and, asc, eq } from "drizzle-orm";
-import { Mux } from "@mux/mux-node";
 import { db } from "@/config/db";
 import { coursesTable, enrollmentsTable, lessonsTable, modulesTable, progressTable, usersTable } from "@/config/schema";
 import { getCurrentAppUser } from "@/lib/auth";
 import { canManageCourses, getOwnedCourse, getOwnedLesson, getOwnedModule } from "@/lib/instructor";
 import { createNotification } from "@/lib/notifications";
-import { generateCourseContent } from "@/lib/ai-course-generator";
+import { generateCourseContent, generateLessonContent } from "@/lib/ai-course-generator";
 import { suggestYoutubeVideos, type YoutubeSuggestion } from "@/lib/youtube-search";
 
 async function requireInstructor() {
@@ -193,19 +192,20 @@ export async function createLesson(moduleId: number, formData: FormData) {
   const owned = await getOwnedModule(appUser.id, appUser.role === "admin", moduleId);
   if (!owned) throw new Error("Không tìm thấy module hoặc bạn không sở hữu.");
 
-  const title = String(formData.get("title") ?? "").trim().slice(0, 255);
-  if (!title) throw new Error("Thiếu tên bài học.");
-  const content = String(formData.get("content") ?? "").trim();
-  const durationRaw = String(formData.get("duration") ?? "").trim();
-  const duration = durationRaw ? Number(durationRaw) : null;
+  const topic = String(formData.get("topic") ?? "").trim().slice(0, 200);
+  if (!topic) throw new Error("Thiếu chủ đề bài học.");
+
+  const generated = await generateLessonContent(topic);
 
   const existing = await db.select().from(lessonsTable).where(eq(lessonsTable.moduleId, moduleId));
   const nextOrder = existing.reduce((max, l) => Math.max(max, l.order), -1) + 1;
 
-  await db.insert(lessonsTable).values({ moduleId, title, content: content || null, duration, order: nextOrder });
+  await db
+    .insert(lessonsTable)
+    .values({ moduleId, title: generated.title, content: generated.content, order: nextOrder });
 
   if (owned.course.published) {
-    await notifyEnrolledStudentsOfNewLesson(owned.course.id, owned.course.title, title);
+    await notifyEnrolledStudentsOfNewLesson(owned.course.id, owned.course.title, generated.title);
   }
 
   revalidatePath(`/instructor/courses/${owned.course.id}`);
@@ -228,13 +228,11 @@ export async function updateLesson(lessonId: number, formData: FormData) {
   const owned = await getOwnedLesson(appUser.id, appUser.role === "admin", lessonId);
   if (!owned) throw new Error("Không tìm thấy bài học hoặc bạn không sở hữu.");
 
-  const title = String(formData.get("title") ?? "").trim().slice(0, 255);
-  if (!title) throw new Error("Tên bài học không được để trống.");
   const content = String(formData.get("content") ?? "").trim();
   const durationRaw = String(formData.get("duration") ?? "").trim();
   const duration = durationRaw ? Number(durationRaw) : null;
 
-  await db.update(lessonsTable).set({ title, content: content || null, duration }).where(eq(lessonsTable.id, lessonId));
+  await db.update(lessonsTable).set({ content: content || null, duration }).where(eq(lessonsTable.id, lessonId));
   revalidatePath(`/instructor/courses/${owned.course.id}`);
 }
 
@@ -271,28 +269,6 @@ export async function moveLesson(lessonId: number, direction: "up" | "down") {
   await db.update(lessonsTable).set({ order: a.order }).where(eq(lessonsTable.id, b.id));
 
   revalidatePath(`/instructor/courses/${owned.course.id}`);
-}
-
-export async function createMuxUpload(lessonId: number): Promise<{ uploadUrl: string }> {
-  const appUser = await requireInstructor();
-  const owned = await getOwnedLesson(appUser.id, appUser.role === "admin", lessonId);
-  if (!owned) throw new Error("Không tìm thấy bài học hoặc bạn không sở hữu.");
-
-  if (!process.env.MUX_TOKEN_ID || !process.env.MUX_TOKEN_SECRET) {
-    throw new Error("Chưa cấu hình MUX_TOKEN_ID/MUX_TOKEN_SECRET.");
-  }
-
-  const mux = new Mux();
-  const upload = await mux.video.uploads.create({
-    cors_origin: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
-    new_asset_settings: {
-      playback_policies: ["public"],
-      passthrough: String(lessonId),
-    },
-  });
-
-  if (!upload.url) throw new Error("Mux không trả về upload URL.");
-  return { uploadUrl: upload.url };
 }
 
 export async function searchYoutubeForLesson(lessonId: number, topic: string): Promise<YoutubeSuggestion[]> {

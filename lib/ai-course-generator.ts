@@ -8,6 +8,8 @@ const LessonSchema = z.object({
   content: z.string(),
 });
 
+export type GeneratedLesson = z.infer<typeof LessonSchema>;
+
 const ModuleSchema = z.object({
   title: z.string(),
   lessons: z.array(LessonSchema).min(2).max(3),
@@ -67,6 +69,51 @@ export async function generateCourseContent(topic: string): Promise<GeneratedCou
   const raw = completion.choices[0]?.message?.content;
   if (!raw) throw new Error("AI không trả về nội dung.");
   const parsed = CourseSchema.safeParse(JSON.parse(raw));
+  if (!parsed.success) throw new Error("AI trả về dữ liệu không đúng định dạng.");
+  return parsed.data;
+}
+
+// Dùng model nhanh/rẻ (Haiku, gpt-4o-mini) vì chỉ sinh 1 bài học đơn lẻ — instructor bấm
+// "Thêm bài học" và chờ ngay trong lúc thao tác, khác với generateCourseContent (sinh cả khoá học,
+// chấp nhận chờ lâu hơn).
+export async function generateLessonContent(topic: string): Promise<GeneratedLesson> {
+  const hasAnthropic = Boolean(process.env.ANTHROPIC_API_KEY);
+  const hasOpenAI = Boolean(process.env.OPENAI_API_KEY);
+  if (!hasAnthropic && !hasOpenAI) {
+    throw new Error("Chưa cấu hình AI provider — cần ANTHROPIC_API_KEY hoặc OPENAI_API_KEY trong .env.");
+  }
+
+  const prompt = `Viết 1 bài học bằng tiếng Việt cho chủ đề: "${topic}". Đặt tên bài học (title) ngắn gọn, rõ ràng. Nội dung giảng dạy thật (content) dài khoảng 80-150 từ, không phải chỉ 1 câu tóm tắt.`;
+
+  if (hasAnthropic) {
+    const anthropic = new Anthropic();
+    const response = await anthropic.messages.parse({
+      model: "claude-haiku-4-5",
+      max_tokens: 2048,
+      // Haiku 4.5 không hỗ trợ output_config.effort (khác Opus 5 dùng ở generateCourseContent) — bỏ field này.
+      output_config: { format: zodOutputFormat(LessonSchema) },
+      messages: [{ role: "user", content: prompt }],
+    });
+    if (!response.parsed_output) throw new Error("AI không trả về dữ liệu hợp lệ.");
+    return response.parsed_output;
+  }
+
+  const openai = new OpenAI();
+  const completion = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    response_format: { type: "json_object" },
+    messages: [
+      {
+        role: "system",
+        content:
+          'Bạn là chuyên gia thiết kế chương trình đào tạo. Luôn trả về đúng 1 JSON object khớp shape: {"title": string, "content": string}. Không thêm text nào khác ngoài JSON.',
+      },
+      { role: "user", content: prompt },
+    ],
+  });
+  const raw = completion.choices[0]?.message?.content;
+  if (!raw) throw new Error("AI không trả về nội dung.");
+  const parsed = LessonSchema.safeParse(JSON.parse(raw));
   if (!parsed.success) throw new Error("AI trả về dữ liệu không đúng định dạng.");
   return parsed.data;
 }
