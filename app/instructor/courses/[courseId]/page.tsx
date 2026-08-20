@@ -44,7 +44,7 @@ export default async function EditCoursePage({
   return (
     <div className="bg-background text-on-background min-h-screen flex flex-col font-body-md text-body-md">
       <SiteHeader />
-      <main className="flex-1 w-full max-w-3xl mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg flex flex-col gap-stack-lg">
+      <main className="flex-1 w-full max-w-6xl mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg flex flex-col gap-stack-lg">
         <Link href="/instructor" className="text-primary font-label-md text-label-md hover:underline flex items-center gap-1 w-fit">
           <MaterialIcon name="arrow_back" className="text-[18px]" /> Danh sách khoá học
         </Link>
@@ -65,10 +65,10 @@ export default async function EditCoursePage({
           </form>
         </div>
 
-        {/* Course info */}
+        {/* Course info — giới hạn bề rộng riêng, các field ngắn không cần kéo dài theo container editor */}
         <form
           action={updateCourse.bind(null, course.id)}
-          className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-6 flex flex-col gap-3"
+          className="w-full max-w-2xl bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-6 flex flex-col gap-3"
         >
           <h2 className="font-headline-md text-headline-md text-on-surface mb-2">Thông tin khoá học</h2>
           <div>
