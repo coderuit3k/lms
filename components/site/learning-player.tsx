@@ -6,7 +6,8 @@ import { MaterialIcon } from "@/components/site/material-icon";
 import { AiTutorPanel } from "@/components/site/ai-tutor-panel";
 import { LessonVideoPlayer } from "@/components/site/lesson-video-player";
 import { LessonActionsBar } from "@/components/site/lesson-actions-bar";
-import type { LearnPageData } from "@/lib/queries";
+import { LessonComments } from "@/components/site/lesson-comments";
+import type { LearnPageData, LessonComment, LessonResourceItem } from "@/lib/queries";
 
 function formatTimestamp(totalSeconds: number) {
   const minutes = Math.floor(totalSeconds / 60);
@@ -14,7 +15,26 @@ function formatTimestamp(totalSeconds: number) {
   return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 }
 
-export function LearningPlayer({ data }: { data: LearnPageData }) {
+function fileIcon(fileType: string | null) {
+  if (!fileType) return "description";
+  if (fileType.includes("pdf")) return "picture_as_pdf";
+  if (fileType.startsWith("image/")) return "image";
+  return "description";
+}
+
+export function LearningPlayer({
+  data,
+  comments,
+  resources,
+  currentUserId,
+  isAdmin,
+}: {
+  data: LearnPageData;
+  comments: LessonComment[];
+  resources: LessonResourceItem[];
+  currentUserId: number;
+  isAdmin: boolean;
+}) {
   const { course, module: mod, lesson, curriculum, prevLessonId, nextLessonId } = data;
   const currentItem = curriculum.find((c) => c.lessonId === lesson.id);
   const showResumeHint =
@@ -113,6 +133,25 @@ export function LearningPlayer({ data }: { data: LearnPageData }) {
           />
         </div>
 
+        {/* Tài liệu đính kèm bài học */}
+        {resources.length > 0 && (
+          <div className="px-1 flex flex-wrap gap-2">
+            {resources.map((r) => (
+              <a
+                key={r.id}
+                href={r.fileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-3 py-2 rounded-lg border border-outline-variant/50 text-on-surface-variant hover:border-primary hover:text-primary transition-colors font-label-sm text-label-sm"
+              >
+                <MaterialIcon name={fileIcon(r.fileType)} className="text-[18px]" />
+                {r.title}
+                <MaterialIcon name="download" className="text-[16px]" />
+              </a>
+            ))}
+          </div>
+        )}
+
         {/* Hàng 2: AI Tutor (khi ở chế độ rạp chiếu phim) + Nội dung khoá học */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter flex-1">
           {cinema && <AiTutorPanel lessonId={lesson.id} compact />}
@@ -157,6 +196,8 @@ export function LearningPlayer({ data }: { data: LearnPageData }) {
             </div>
           </div>
         </div>
+
+        <LessonComments lessonId={lesson.id} comments={comments} currentUserId={currentUserId} isAdmin={isAdmin} />
       </main>
     </div>
   );

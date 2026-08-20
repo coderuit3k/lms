@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { LearningPlayer } from "@/components/site/learning-player";
 import { getCurrentAppUser } from "@/lib/auth";
 import { getOwnedCourse } from "@/lib/instructor";
-import { getEnrollmentStatus, getLearnPageData } from "@/lib/queries";
+import { getEnrollmentStatus, getLearnPageData, getLessonComments, getLessonResources } from "@/lib/queries";
 
 export default async function LearnPage({
   params,
@@ -24,5 +24,15 @@ export default async function LearnPage({
   const isOwner = Boolean(await getOwnedCourse(appUser.id, appUser.role === "admin", data.course.id));
   if (enrollmentStatus !== "paid" && !isOwner) redirect(`/courses/${data.course.slug}`);
 
-  return <LearningPlayer data={data} />;
+  const [comments, resources] = await Promise.all([getLessonComments(lessonId), getLessonResources(lessonId)]);
+
+  return (
+    <LearningPlayer
+      data={data}
+      comments={comments}
+      resources={resources}
+      currentUserId={appUser.id}
+      isAdmin={appUser.role === "admin"}
+    />
+  );
 }

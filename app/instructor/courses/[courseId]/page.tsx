@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/site/footer";
 import { MaterialIcon } from "@/components/site/material-icon";
 import { YoutubeVideoPicker } from "@/components/site/youtube-video-picker";
 import { LessonVideoPlayer } from "@/components/site/lesson-video-player";
+import { LessonResourceManager } from "@/components/site/lesson-resource-manager";
 import { getCurrentAppUser } from "@/lib/auth";
 import { getOwnedCourse } from "@/lib/instructor";
 import { getInstructorCourseDetail } from "@/lib/queries";
@@ -293,6 +294,8 @@ export default async function EditCoursePage({
                           </button>
                         </form>
                       </div>
+
+                      <LessonResourceManager lessonId={lesson.id} resources={lesson.resources} />
                     </div>
                   </details>
                 ))}

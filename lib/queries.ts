@@ -436,6 +436,28 @@ export async function getLessonComments(lessonId: number): Promise<LessonComment
   return rows;
 }
 
+export type LessonResourceItem = {
+  id: number;
+  title: string;
+  fileUrl: string;
+  fileType: string | null;
+  createdAt: Date;
+};
+
+export async function getLessonResources(lessonId: number): Promise<LessonResourceItem[]> {
+  return db
+    .select({
+      id: resourcesTable.id,
+      title: resourcesTable.title,
+      fileUrl: resourcesTable.fileUrl,
+      fileType: resourcesTable.fileType,
+      createdAt: resourcesTable.createdAt,
+    })
+    .from(resourcesTable)
+    .where(eq(resourcesTable.lessonId, lessonId))
+    .orderBy(desc(resourcesTable.createdAt));
+}
+
 export async function getHoursSpent(userId: number): Promise<number> {
   const [row] = await db
     .select({ minutes: sql<number>`coalesce(sum(${lessonsTable.duration}), 0)`.mapWith(Number) })
@@ -690,6 +712,7 @@ export type InstructorModule = {
     youtubeUrl: string | null;
     duration: number | null;
     content: string | null;
+    resources: LessonResourceItem[];
   }[];
 };
 
@@ -708,6 +731,21 @@ export async function getInstructorCourseDetail(courseId: number) {
         .orderBy(asc(lessonsTable.order))
     : [];
 
+  const resources = lessons.length
+    ? await db
+        .select({
+          id: resourcesTable.id,
+          title: resourcesTable.title,
+          fileUrl: resourcesTable.fileUrl,
+          fileType: resourcesTable.fileType,
+          createdAt: resourcesTable.createdAt,
+          lessonId: resourcesTable.lessonId,
+        })
+        .from(resourcesTable)
+        .where(inArray(resourcesTable.lessonId, lessons.map((l) => l.id)))
+        .orderBy(desc(resourcesTable.createdAt))
+    : [];
+
   const result: InstructorModule[] = modules.map((m) => ({
     id: m.id,
     title: m.title,
@@ -722,6 +760,7 @@ export async function getInstructorCourseDetail(courseId: number) {
         youtubeUrl: l.youtubeUrl,
         duration: l.duration,
         content: l.content,
+        resources: resources.filter((r) => r.lessonId === l.id),
       })),
   }));
 

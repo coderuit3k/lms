@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { and, asc, eq } from "drizzle-orm";
 import { db } from "@/config/db";
-import { coursesTable, enrollmentsTable, lessonsTable, modulesTable, progressTable, usersTable } from "@/config/schema";
+import { coursesTable, enrollmentsTable, lessonsTable, modulesTable, progressTable, resourcesTable, usersTable } from "@/config/schema";
 import { getCurrentAppUser } from "@/lib/auth";
 import { canManageCourses, getOwnedCourse, getOwnedLesson, getOwnedModule } from "@/lib/instructor";
 import { createNotification } from "@/lib/notifications";
@@ -288,6 +288,15 @@ export async function clearLessonYoutubeVideo(lessonId: number) {
   if (!owned) throw new Error("Không tìm thấy bài học hoặc bạn không sở hữu.");
 
   await db.update(lessonsTable).set({ youtubeUrl: null }).where(eq(lessonsTable.id, lessonId));
+  revalidatePath(`/instructor/courses/${owned.course.id}`);
+}
+
+export async function deleteLessonResource(resourceId: number, lessonId: number) {
+  const appUser = await requireInstructor();
+  const owned = await getOwnedLesson(appUser.id, appUser.role === "admin", lessonId);
+  if (!owned) throw new Error("Không tìm thấy bài học hoặc bạn không sở hữu.");
+
+  await db.delete(resourcesTable).where(and(eq(resourcesTable.id, resourceId), eq(resourcesTable.lessonId, lessonId)));
   revalidatePath(`/instructor/courses/${owned.course.id}`);
 }
 
